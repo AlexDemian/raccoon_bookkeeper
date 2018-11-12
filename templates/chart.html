@@ -1,0 +1,44 @@
+{% load staticfiles %}
+
+<script src="{% static 'modules/jscharts/canvasjs.min.js' %}"></script>
+
+
+<script>
+function renderChart(chart_data, container_id) {
+
+    var chart = new CanvasJS.Chart(container_id, {
+        backgroundColor: "#f5f5f5",
+        theme: "light2",
+        exportFileName: "Doughnut Chart",
+        exportEnabled: true,
+        animationEnabled: true,
+        title:{
+            text: ""
+        },
+        legend:{
+            cursor: "pointer",
+            itemclick: explodePie
+        },
+        data: [{
+            type: "doughnut",
+            innerRadius: 50,
+            showInLegend: false,
+            toolTipContent: "<b>{name}</b>: {y} (#percent%)",
+            indexLabel: "{name} - #percent%",
+            dataPoints: chart_data
+        }]
+    });
+    chart.render();
+
+    function explodePie (e) {
+        if(typeof (e.dataSeries.dataPoints[e.dataPointIndex].exploded) === "undefined" || !e.dataSeries.dataPoints[e.dataPointIndex].exploded) {
+            e.dataSeries.dataPoints[e.dataPointIndex].exploded = true;
+        } else {
+            e.dataSeries.dataPoints[e.dataPointIndex].exploded = false;
+        }
+        e.chart.render();
+    }
+
+}
+</script>
+

@@ -1,0 +1,156 @@
+{% load static %}
+<html lang="en">
+{% include 'head.html' %}
+{% include 'generic_style.html' %}
+{% include 'register.html' %}
+<style>
+#auth_container{
+    position: absolute;
+    transform: translateX(-80%);
+    top: 41.5%;
+    left: 50%;
+    font-weight: bold;
+}
+
+
+#logo_container{
+    position: absolute;
+    transform: translateX(-51.5%);
+    top: 9%;
+    left: 50%;
+    width: 500px;
+    height: 500px;
+    background-image:  url({% static 'img/logo_original.png' %});
+    background-repeat: no-repeat;
+    background-size: 500px 500px;
+    opacity: .65;
+}
+
+#video_container {
+    position: absolute;
+    top: 25%;
+    margin-left: 4%;
+    width: 300px;
+    height: 250px;
+
+    transform: translateX(-50%);
+    background-color: black;
+
+}
+
+#label_container {
+    position: absolute;
+    top: 7%;
+    left: 50%;
+    transform: translateX(-48.5%);
+
+}
+
+#right_container {
+    position: absolute;
+    left: 80%;
+    top: 0%;
+    height: 100%;
+    width: 20%;
+
+    background-color: #4e4882;
+    color: white;
+    font-size: 15px;
+
+}
+
+#left_container {
+    position: absolute;
+    top: 0%;
+    height: 100%;
+    width: 2%;
+    background-color: #4e4882;
+    margin-right: 97%;
+}
+
+
+#description_top{
+    position: absolute;
+    top: 5%;
+    margin-left: 10%;
+    width: 80%;
+}
+
+#description_bottom{
+    position: absolute;
+    top: 56%;
+    margin-left: 10%;
+    width: 80%;
+}
+
+
+input {
+    margin-top: 7px;
+}
+
+
+</style>
+<body>
+
+
+
+<center>
+    <div id="logo_container"></div>
+
+    <div id="label_container">
+        <font size="7px">
+            Raccoon bookkeeper
+        </font>
+        <br/>
+
+        <font size="4px">
+            Your personal financial assistant.
+        </font>
+    </div>
+
+    <div id="auth_container">
+
+
+        <form id="login_form" action="" method="POST">{% csrf_token %}
+            {% for f in auth_form %}
+            {{ f }}
+            {% endfor %}
+            <button type="sumbit" class="btn btn-primary" style="margin-top:10px">Sign in</button>
+        </form>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registerModal">
+            Register
+        </button>
+
+
+
+    </div>
+    <div id="left_container"></div>
+    <div id="right_container">
+
+        <div id="description_top">
+            sample text
+        </div>
+        <iframe id="video_container"
+        src="https://www.youtube.com/embed/CINERx2q7sc">
+        </iframe>
+        <div id="description_bottom">
+            sample text
+        </div>
+
+    </div>
+
+   <div id="alerts_container">
+    {% for alert in alerts %}
+        <div class="alert alert-danger" role="alert" style="margin-bottom:30px;">
+            <center>{{ alert }}</center>
+        </div>
+    {% endfor %}
+    </div>
+
+
+</center>
+
+
+</body>
+</html>
