@@ -12,8 +12,11 @@ from django import forms
 
 from django.views import View
 
+from django.db.models import signals
 from django.contrib.auth.models import User
 from booker.models import UserConfigs, UserCategories
+from conf.tasks import send_verification_email
+
 
 class Login(View):
 
@@ -66,6 +69,19 @@ class Register(View):
             category = UserCategories(user=user, name=cat[0], type=cat[1])
             category.save()
 
+        user_id = User.objects.get(username=username).id
+        send_verification_email.delay(user_id)
+        return HttpResponseRedirect("/index")
 
-        authenticate(username=username, password=password)
+class Verify(View):
+    def post(self, request, uuid):
+        try:
+            user = User.objects.get(verification_uuid=uuid, is_verified=False)
+        except User.DoesNotExist:
+            pass
+            #raise Http404("User does not exist or is already verified")
+
+        user.is_verified = True
+        user.save()
+
         return HttpResponseRedirect("/index")
