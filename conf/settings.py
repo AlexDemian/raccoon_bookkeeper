@@ -1,12 +1,17 @@
 import os
 import settings_secret
-from settings_secret import SECRET_KEY
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+BROKER_URL = 'redis://%s:%s/0' % (REDIS_HOST, REDIS_PORT)
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = BROKER_URL
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'

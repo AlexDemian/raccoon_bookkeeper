@@ -1,3 +1,5 @@
 django>=1.9
 sqlalchemy
 celery
+psycopg2
+unixtimestampfield
