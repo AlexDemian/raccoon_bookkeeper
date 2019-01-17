@@ -1,5 +1,6 @@
 import os
 import settings_secret
+from settings_secret import SECRET_KEY
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,8 +16,8 @@ CELERY_RESULT_BACKEND = BROKER_URL
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = settings_secret.DATABASE_USER
-EMAIL_HOST_PASSWORD = settings_secret.DATABASE_PASSWORD
+EMAIL_HOST_USER = settings_secret.EMAIL_USERNAME
+EMAIL_HOST_PASSWORD = settings_secret.EMAIL_PASSWORD
 EMAIL_PORT = 587
 
 INSTALLED_APPS = [
