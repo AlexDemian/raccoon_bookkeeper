@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'booker',
-    'auth_control'
+    'auth_control',
+    'simple_email_confirmation'
 ]
 
 MIDDLEWARE = [
@@ -64,7 +65,7 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'raccoon_bookkeeper',
+        'NAME': 'raccoon',
         'USER': settings_secret.DATABASE_USER,
         'PASSWORD': settings_secret.DATABASE_PASSWORD,
         'HOST': 'localhost',
