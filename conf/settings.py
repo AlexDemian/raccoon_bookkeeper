@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'booker',
     'auth_control',
-    'simple_email_confirmation'
 ]
 
 MIDDLEWARE = [
