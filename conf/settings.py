@@ -8,7 +8,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
-AUTH_USER_MODEL = 'conf.CustomUser'
+AUTH_USER_MODEL = 'auth_control.User'
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
