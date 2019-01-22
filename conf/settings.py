@@ -8,6 +8,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
+AUTH_USER_MODEL = 'conf.CustomUser'
+
 REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
 BROKER_URL = 'redis://%s:%s/0' % (REDIS_HOST, REDIS_PORT)

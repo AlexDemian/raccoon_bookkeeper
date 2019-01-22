@@ -12,13 +12,13 @@ from django import forms
 
 from django.views import View
 
-from django.db.models import signals
 from django.contrib.auth.models import User
 from booker.models import UserConfigs, UserCategories
-#from conf.tasks import send_verification_email
+
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
+import hashlib
 
 class Login(View):
 
@@ -48,6 +48,11 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/auth/login")
 
+def get_token(email):
+    User.objects.filter(username=email)
+    return hashlib.sha1().hexdigest()
+
+
 class Register(View):
     default_categories = [
         ('meal', '-'),
@@ -74,12 +79,18 @@ class Register(View):
                 category.save()
 
             subject = 'Welcome to Raccoon bookkeeper!'
-            message = render_to_string('confirmation_letter.html', {'user_email': username, 'user_password': password, 'confirmation_url': 'www.google.com'})
+
+            context = {
+                'user_email': username,
+                'user_password': password,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            }
+            message = render_to_string('confirmation_letter.html', context)
 
             msg = EmailMessage(subject, message, 'admin@raccoon_bookkeeper', [username])
             msg.content_subtype = 'html'
             msg.send()
-
             return HttpResponseRedirect("/index")
 
         except:
@@ -89,15 +100,3 @@ class Register(View):
         finally:
             user.delete()
 
-class Verify(View):
-    def post(self, request, uuid):
-        try:
-            user = User.objects.get(verification_uuid=uuid, is_verified=False)
-        except User.DoesNotExist:
-            pass
-            #raise Http404("User does not exist or is already verified")
-
-        user.is_verified = True
-        user.save()
-
-        return HttpResponseRedirect("/index")
