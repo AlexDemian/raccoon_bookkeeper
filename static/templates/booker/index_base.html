@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+
+
+    #child_container {
+        position: absolute;
+        top: 150px;
+        margin-left: 200px;
+        width: 88%;
+        height: 80%;
+        overflow-y: scroll;
+    }
+
+    .sheet-container {
+        margin-bottom: 100px;
+        min-height: 500px;
+
+
+    }
+
+    .chart-container {
+        display: inline-block;
+        position: absolute;
+        margin-left: 70px;
+    }
+
+
+     .table-container {
+         width: 70%;
+         display: inline-block;
+     }
+
+    #menu_container {
+        position: absolute;
+        top: 50px;
+        width: 150px;
+        height: calc(100% - 50px);
+        background-color: #4e4882;
+        color: white;
+        border-right: 2px solid black;
+        box-shadow: 2px 0px 5px gray;
+    }
+
+    .menu-field {
+        margin-top: 5px;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .horizontal-separator {
+        background-color: black;
+        height: 2px;
+        width: 100%;
+        box-shadow: 0px 3px 5px white;
+
+    }
+
+    .row-field {
+        width: 20%;
+        display: inline-block;
+    }
+
+</style>
+
+
+
+<div id="menu_container" align="center">
+
+    <div class="horizontal-separator"></div>
+    <form id="filters_form">
+        <input type="hidden" name="target" value="sheets_ids">
+        Sheet filters:
+        {% for field in filter_form %}
+            <div class="menu-field">{{ field }}</div>
+        {% endfor %}
+        <button class="btn btn-info menu-field" type="button" onclick="get_all_sheets()">Filter it!</button>
+    </form>
+    <br>
+    <div class="horizontal-separator"></div>
+    <br>
+    <form id="add_sheet_form">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="action" value="add">
+        Add sheet:
+        {% for field in add_sheet_form %}
+            <div class="menu-field">{{ field }}</div>
+        {% endfor %}
+        <button class="btn btn-info menu-field"  type="button"  onclick="add_sheet()">Add!</button>
+    </form>
+    <br>
+    <div class="horizontal-separator"></div>
+    <br>
+    <button class="btn btn-info menu-field"  type="button"  onclick="showHideGpaphs();">Show/hide charts</button>
+
+</div>
+
+<div id="child_container"></div>
+
+
+<script>
+    var show_graphs = true;
+
+    function get(url, args, result_to) {
+        $.get(url, args)
+            .done(function( data ) {
+                result_to.html(data);
+        });
+    }
+
+    function get_all_sheets() {
+        args = $('#filters_form').serialize();
+        get('booker/api_sheets', args, $('#child_container'));
+    }
+
+    function add_category() {
+        $.post('booker/api_categories', $('#add_category_form').serializeArray())
+        .done(function( data ) {
+            if (!data.status) {
+            alert(data.message);
+            }
+        });
+    }
+
+
+    function add_sheet() {
+
+        $.post('booker/api_sheets', $('#add_sheet_form').serializeArray())
+            .done(function( data ) {
+                if (!data.status) {
+                alert(data.message);
+                }
+        });
+        get_all_sheets()
+    }
+
+    $(".select2_bootstrap").select2();
+    get_all_sheets();
+
+    function showHideGpaphs() {
+        if (show_graphs) {
+            $('.chart-container').hide();
+            $('.table-container').width('100%');
+            show_graphs = false;
+        } else {
+             $('.chart-container').show();
+             $('.table-container').width('70%');
+            show_graphs = true;
+        }
+    }
+
+
+
+</script>
+
+
+{% endblock %}

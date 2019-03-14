@@ -7,8 +7,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
+BASE_URL = 'http://www.raccoonbooker.com'
 
-AUTH_USER_MODEL = 'auth_control.User'
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
@@ -29,8 +29,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'booker',
-    'auth_control',
+    'Booker',
+    'Auth',
+    'UserConfs',
 ]
 
 MIDDLEWARE = [
@@ -43,21 +44,27 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTH_USER_MODEL = 'Auth.User'
 ROOT_URLCONF = 'conf.urls'
+LOGIN_URL = 'auth/signin_form'
+STATIC_URL = 'templates/static/'
+STATIC_ROOT = 'templates/static/'
+
+
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS':  [os.path.join(BASE_DIR, "templates")],
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [os.path.join(BASE_DIR, "static/templates")],
         'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
+        'OPTIONS':
+            {
+                'environment': 'conf.jinja2_conf.environment',
+                'context_processors': [
+                    'django.contrib.messages.context_processors.messages',
+                    'django.contrib.auth.context_processors.auth'
+                ]
+            },
     },
 ]
 
@@ -103,8 +110,5 @@ USE_L10N = True
 USE_TZ = True
 
 
-LOGIN_URL = 'auth/login'
-STATIC_URL = 'templates/static/'
-STATIC_ROOT = 'templates/static/'
 
 

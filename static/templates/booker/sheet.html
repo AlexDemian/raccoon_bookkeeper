@@ -1,0 +1,82 @@
+<div class="table-container" id="table-container-{{ sheet.id }}">
+    <div>
+        <h3>{{ period }}:{{ sheet.name }}<button type="button" class="btn btn-danger" style="margin-left:20px;">X</button></h3>
+    </div>
+
+    <br>
+
+    <div >
+        <table class="table table">
+            <thead>
+                <tr>
+                    <th>Pin</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for act in activities %}
+                    <tr>
+                        <td>Pin</td>
+                        <td>{{ act.name }}</td>
+                        <td>{{ act.descr }}</td>
+                        <td>{{ act.category }}</td>
+                        <td>{{ act.value }}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" type="button" onclick="delete_activity({{ act.id }}, {{ sheet.id }})">EDIT</button>
+                            <button class="btn btn-danger btn-sm" type="button" onclick="delete_activity({{ act.id }}, {{ sheet.id }})">X</button>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" align="center"></td></tr>
+                    <tr><td colspan="6" align="center"><h3>No activities. Add new.</h3></td></tr>
+                    <tr><td colspan="6" align="center"></td></tr>
+                {% endfor %}
+                <tr style="font-weight: 700">
+                    {% set delta = (earnings_sum + costs_sum) %}
+                    <td>Total:</td>
+                    <td>Earnings total: {{ earnings_sum }}</td>
+                    <td>Costs total: {{ costs_sum }}</td>
+                    <td style="color: {{ 'black' if delta >= 0 else 'red' }}">Delta: {{ delta }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <div>
+        <form id="add-act-{{ sheet.id }}">
+            <input type="hidden" name="sheet" value="{{ sheet.id }}">
+            <div class="row-field">{{ add_activity_form.name }}</div>
+            <div class="row-field">{{ add_activity_form.descr }}</div>
+            <div class="row-field">{{ add_activity_form.category }}<button class="fa fa-pensil" type="button">Edit</button></div>
+            <div class="row-field">{{ add_activity_form.value }}</div>
+            <button class="btn btn-info btn-sm" type="button" onclick="add_activity($('#add-act-{{ sheet.id }}'), {{ sheet.id }})">ADD</button>
+        </form>
+    </div>
+</div>
+
+<div class="chart-container" id="chart-container-{{ sheet.id }}" ></div>
+<script>
+    var chart_data = {{ chart_data|safe }};
+    var container_id = 'chart-container-{{ sheet.id }}';
+
+    if (chart_data.length > 0 ) {
+        renderChart(chart_data, container_id);
+    }
+
+    if (!show_graphs) {
+        $('#chart-container-{{ sheet.id }}').hide();
+        $('#table-container-{{ sheet.id }}').width('100%');
+    }
+</script>

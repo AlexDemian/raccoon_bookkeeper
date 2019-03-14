@@ -1,0 +1,70 @@
+<!-- Modal -->
+<style>
+  #registerModal {
+    top: 20%;
+  }
+</style>
+
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registration</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form action="/auth/register" id="register_form" method="POST">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <div class="modal-body">
+          Email: {{ register_form.username }}
+          <br>
+          Password: {{ register_form.password }}
+        </div>
+
+        <center>
+          <div id="register_validation_errors_container" style="width: 90%;"></div>
+        </center>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button"  class="btn btn-primary" onclick="register()">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+
+
+  function validate(key, value) {
+    var data = {};
+    data[key] = value;
+    $.ajax({
+        url: '/auth/validate_' + key,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+          if (!(data.is_valid)) {
+            alert(data.message);
+            } else {
+            $fields_valid.push(true);
+          }
+          }
+        });
+  }
+
+  function register() {
+      $fields_valid = [];
+      validate('username', $("#{{ register_form.username.id_for_label }}").val());
+      validate('password', $("#{{ register_form.password.id_for_label }}").val());
+
+      $(document).ajaxStop(function () {
+         if ($fields_valid.length == 2) {
+          $("#register_form").submit();
+        }
+      });
+  }
+
+  </script>
+  </div>

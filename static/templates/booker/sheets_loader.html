@@ -1,0 +1,111 @@
+<script src="../modules/jscharts/canvasjs.min.js"></script>
+
+<script>
+    var charts = [];
+    function renderChart(chart_data, container_id) {
+
+        var chart = new CanvasJS.Chart(container_id, {
+            backgroundColor: "rgba(225,150,150,0)",
+            height:350,
+            width: 350,
+            theme: "light2",
+            exportFileName: "Name",
+            exportEnabled: true,
+            animationEnabled: true,
+            title:{
+                text: "Costs total"
+            },
+            legend:{
+                cursor: "pointer",
+                itemclick: explodePie
+            },
+            data: [{
+                type: "doughnut",
+                innerRadius: 50,
+                showInLegend: false,
+                toolTipContent: "<b>{name}</b>: {y} (#percent%)",
+                indexLabel: "{name} - #percent%",
+                dataPoints: chart_data
+            }]
+        });
+        chart.render();
+
+        function explodePie (e) {
+            if(typeof (e.dataSeries.dataPoints[e.dataPointIndex].exploded) === "undefined" || !e.dataSeries.dataPoints[e.dataPointIndex].exploded) {
+                e.dataSeries.dataPoints[e.dataPointIndex].exploded = true;
+            } else {
+                e.dataSeries.dataPoints[e.dataPointIndex].exploded = false;
+            }
+            e.chart.render();
+        }
+
+    }
+
+
+    function get_sheets(sheet_ids) {
+        $.getJSON({
+            url: 'booker/api_sheets',
+            data: {
+                sheet_ids: sheet_ids,
+                target: 'sheets'
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (i=0; i < data.sheets.length; i++ ) {
+                    console.log(data.sheets[i].html);
+                    $('#sheet-container-' + data.sheets[i].id).html(data.sheets[i].html);
+
+
+
+                }
+            }
+        });
+    }
+
+
+    function api_activity(form_data, sheet_id) {
+        form_data.push({name: 'csrfmiddlewaretoken', value: '{{ csrf_token }}'});
+        $.post({
+            url: 'booker/api_activities',
+            data: form_data,
+            dataType: 'json',
+            complete: function () {
+                get_sheets([sheet_id]);
+            },
+            success: function (data) {
+                if (!data.status) {
+                    alert(data.message);
+                }
+            }
+        });
+    }
+
+
+    function add_activity(form, sheet_id) {
+        var form_data = form.serializeArray();
+        form_data.push({name: "action", value: 'add'});
+        api_activity(form_data, sheet_id);
+    }
+
+    function delete_activity(act_id, sheet_id) {
+        var form_data = [
+            {name: 'action', value: 'delete'},
+            {name: 'id', value: act_id}
+        ];
+        api_activity(form_data, sheet_id);
+    }
+
+
+
+</script>
+{% for sheet in sheets %}
+    <div class="sheet-container" id="sheet-container-{{ sheet }}"></div>
+{% endfor %}
+
+<script>
+    get_sheets({{ sheets }});
+    $(document).ajaxStop(function () {
+      $(".select2_bootstrap").select2();
+    });
+
+</script>

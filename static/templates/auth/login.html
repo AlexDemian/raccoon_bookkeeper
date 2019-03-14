@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+
+{% block navbar %}
+{% endblock %}
+
+
+{% block content %}
+{% include 'auth/register.html' %}
+
+<style>
+
+    #logo_container, #auth_form_container{
+        position: absolute;
+        transform: translateX(-51.5%);
+        top: 12%;
+        left: 50%;
+        width: 500px;
+        height: 500px;
+        text-align: center
+
+    }
+
+    #logo_container {
+        position: absolute;
+        background-image:  url('../img/logo_original.png');
+        background-repeat: no-repeat;
+        background-size: 500px 500px;
+        opacity: .65;
+    }
+
+
+    #auth_form {
+        width: 50%;
+        margin-top: 45%;
+        font-weight: bold;
+        transform: translateX(30.5%);
+    }
+
+    #video_container {
+        position: absolute;
+        width: 300px;
+        height: 250px;
+        top: 30%;
+        left: 10%;
+        background-color: black;
+
+    }
+
+
+    #right_container {
+        position: absolute;
+        left: 80%;
+        height: 100%;
+        width: 20%;
+        background-color: #4e4882;
+        color: #fdffff;
+        font-size: 15px;
+
+    }
+
+    #left_container {
+        position: absolute;
+        height: 100%;
+        width: 2%;
+        background-color: #4e4882;
+        margin-right: 97%;
+    }
+
+
+    #description_top{
+        position: absolute;
+        top: 5%;
+        left: 20%;
+        width: 80%;
+    }
+
+    #description_bottom{
+        position: absolute;
+        top: 62%;
+        left: 20%;
+        width: 80%;
+    }
+
+    button  {
+        margin-top: 7px;
+    }
+
+    input {
+        margin-top: 7px;
+    }
+
+</style>
+<div id="logo_container"></div>
+
+<div id="auth_form_container">
+    <div id="label_container">
+        <span style="font-size: 40px">Raccoon Booker</span>
+        <br>
+        <span style="font-size: 25px">Your personal finance assistant.</span>
+    </div>
+
+    <div id="auth_form">
+
+        <form id="login_form" action="../auth/login" method="POST">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <span>Username: {{ auth_form.username }}</span>
+            <span>Password: {{ auth_form.password }}</span>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registerModal">
+            Register
+        </button>
+
+    </div>
+</div>
+
+<div id="left_container"></div>
+
+<div id="right_container">
+
+    <div id="description_top">
+        sample text
+    </div>
+
+
+    <iframe id="video_container"
+    src="https://www.youtube.com/embed/CINERx2q7sc">
+    </iframe>
+
+
+    <div id="description_bottom">
+        sample text
+    </div>
+
+</div>
+
+<div id="alerts_container">
+{% for alert in alerts %}
+    <div class="alert alert-danger" role="alert" style="margin-bottom:30px;">
+        {{ alert }}
+    </div>
+{% endfor %}
+</div>
+
+
+
+
+{% endblock %}

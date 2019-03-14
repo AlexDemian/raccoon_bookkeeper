@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Raccoon booker</title>
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+</head>
+<body>
+{% block navbar %}
+    <style>
+        nav {
+            width: 100%;
+            height: 50px;
+            background-color: white;
+            border-bottom: 3px solid #4e4882;
+           }
+
+
+        #logout_form {
+            position: absolute;
+            right: 3%;
+        }
+
+        #logo_label {
+            position: absolute;
+            left: 12%;
+            width: 300px;
+            height: 50px;
+            border-radius: 100px;
+            border: #17a2b8 solid 3px;
+            text-align: center;
+            text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+
+        }
+
+        #logo-image-container {
+            position: absolute;
+            left: 3%;
+            opacity: 100%;
+        }
+
+        #logo-image {
+            margin-top: 10px;
+            width: 120px;
+            height: 120px;
+        }
+
+        #navbar_buttons {
+            position: absolute;
+            left: 33%;
+            width: 70%;
+        }
+
+        .div_navbar_button {
+            display: inline-block;
+        }
+    </style>
+
+
+    <nav class="navbar navbar-dark fixed-top navbar-expand-md ">
+        <div class="container" >
+
+
+            <div class="navbar-collapse collapse">
+
+                <a class="navbar-brand" href="index" id="logo-image-container">
+                    <img src="img/logo_original.png" id="logo-image" class="d-inline-block align-center" alt=""></a>
+
+                <div id="logo_label">
+                    <i><font size="6" face="Geneva" color="white">Raccoon bookkeeper</font></i>
+                </div>
+
+                <div id="navbar_buttons">
+                    <div class="div_navbar_button">
+                        <form  action="./user_confs" method="get">
+                            <button type="submit" class="btn btn-md btn-outline-info" style="margin-left: 30px;">Settings</button>
+                        </form>
+                    </div>
+
+                    <div class="div_navbar_button">
+                        <form  action="/about" method="get" >
+                            <button type="submit" class="btn btn-md btn-outline-info" style="margin-left: 30px;">About</button>
+                        </form>
+                    </div>
+
+                    <div class="div_navbar_button">
+                        <form  action="/donate" method="get" >
+                            <button type="submit" class="btn btn-md btn-outline-info" style="margin-left: 30px;">
+                                <i class="glyphicon glyphicon-heart red" style="color:#DC143C"></i> Donate <i class="glyphicon glyphicon-heart" style="color:#DC143C"></i>
+                            </button>
+                         </form>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+            <div id="logout_form" class="navbar-collapse collapse">
+                <ul class="navbar-nav mr-auto"></ul>
+                <font face="raphael" size="4" color="black" >Welcome back, {{ user }}!</font>
+                <form  action="../auth/logout" method="POST" >
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    <button type="submit" class="btn btn-md btn-outline-info" >Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+<script>
+    function alert(message) {
+        var box = bootbox.alert({
+            message: message,
+            backdrop: true,
+            className: 'alert-window'
+        });
+        box.find('.modal-content').css({'background-color': '#fefbd8'})
+    };
+
+    {% for message in messages %}
+        alert('{{ message }}');
+    {% endfor %}
+
+
+</script>
+
+
+{% block style %}
+<style>
+    body {
+        background-image: url('../img/backgrounds/default_background.png');
+        background-repeat: repeat;
+    }
+
+    html, body{
+        font-size: 13px;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+{% endblock %}
+</body>
+<footer>
+{% block footer %}
+{% endblock %}
+</footer>
+</html>
