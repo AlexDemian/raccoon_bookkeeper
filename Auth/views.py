@@ -9,7 +9,7 @@ from .forms import AuthForm, RegisterForm
 
 from django.views import View
 
-from models import User
+from .models import User
 from Booker.models import UserConfigs
 
 from django.core.mail import EmailMessage
@@ -82,9 +82,7 @@ def register(request):
 
 
 def login(request):
-    not_confirmed_message = '''Please check your email for activation letter.'''
-
-
+    not_confirmed_message = '''Your account is confirmed. Please check your email for confirmation letter.'''
 
     if request.method == 'POST':
         user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])

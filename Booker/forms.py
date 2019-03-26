@@ -87,7 +87,6 @@ class AddActivityForm(ModelForm):
         super(AddActivityForm, self).__init__(*args, **kwargs)
 
         if uid:
-            print 'uid', uid
             self.fields['category'].widget.choices = [[cat.name, cat.name] for cat in UserCategories.objects.filter(user=uid)]
 
     class Meta:

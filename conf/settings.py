@@ -1,6 +1,6 @@
 import os
-import settings_secret
-from settings_secret import SECRET_KEY
+from conf import settings_secret
+from .settings_secret import SECRET_KEY
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

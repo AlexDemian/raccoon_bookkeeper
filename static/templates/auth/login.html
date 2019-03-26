@@ -86,8 +86,9 @@
         margin-top: 7px;
     }
 
-    input {
+    .inline {
         margin-top: 7px;
+        display: inline-block;
     }
 
 </style>
@@ -104,8 +105,8 @@
 
         <form id="login_form" action="../auth/login" method="POST">
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-            <span>Username: {{ auth_form.username }}</span>
-            <span>Password: {{ auth_form.password }}</span>
+            <div>{{ auth_form.username }}</div>
+            <div>{{ auth_form.password }}</div>
             <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
 

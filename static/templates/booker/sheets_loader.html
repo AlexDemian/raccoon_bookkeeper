@@ -51,15 +51,11 @@
             },
             dataType: 'json',
             success: function (data) {
-                for (i=0; i < data.sheets.length; i++ ) {
-                    console.log(data.sheets[i].html);
-                    $('#sheet-container-' + data.sheets[i].id).html(data.sheets[i].html);
+                data.sheets.forEach(function(item) {
+                    $('#sheet-container-' + item.id).html(item.html);
+            })
+        } })
 
-
-
-                }
-            }
-        });
     }
 
 
@@ -100,6 +96,8 @@
 </script>
 {% for sheet in sheets %}
     <div class="sheet-container" id="sheet-container-{{ sheet }}"></div>
+{% else %}
+    <h3 align="center"><i>No sheets created yet. Add your first one :)</i></h3>
 {% endfor %}
 
 <script>
