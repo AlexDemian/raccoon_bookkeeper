@@ -4,4 +4,4 @@
 /env
 *secret*
 *.pyc
-
+*.log
