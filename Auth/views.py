@@ -10,7 +10,6 @@ from .forms import AuthForm, RegisterForm
 from django.views import View
 
 from .models import User
-from Booker.models import UserConfigs
 
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -71,9 +70,9 @@ def register(request):
         if not username or not password:
             return redirect("/auth/signin_form")
 
-        user = User.objects.create_user(username=username, password=password)
-        user.save()
-        messages.info(request, 'Account registered successfully. Please, check your mailbox (%s) for confirmation instructions' % request.POST["username"])
+        user = User(username=request.POST["username"], password=request.POST["password"]).custom_save()
+
+        messages.info(request, 'Account registered successfully. Please, check your mailbox (%s) for confirmation instructions' % user.username)
         send_confirmation_letter(user.id, username, password, user.access_token)
         auth.login(request, user)
     return redirect("/index")
@@ -82,7 +81,7 @@ def register(request):
 
 
 def login(request):
-    not_confirmed_message = '''Your account is confirmed. Please check your email for confirmation letter.'''
+    not_confirmed_message = 'Your account is not confirmed. Please check your email for confirmation letter.'
 
     if request.method == 'POST':
         user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])

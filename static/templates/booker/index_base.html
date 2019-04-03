@@ -24,6 +24,8 @@
         display: inline-block;
         position: absolute;
         margin-left: 70px;
+        height: 350px;
+        width: 350px;
     }
 
 
@@ -130,9 +132,11 @@
             .done(function( data ) {
                 if (!data.status) {
                 alert(data.message);
+                } else {
+                    get_all_sheets();
                 }
         });
-        get_all_sheets()
+
     }
 
     $(".select2_bootstrap").select2();

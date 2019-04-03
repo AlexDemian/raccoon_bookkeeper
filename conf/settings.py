@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 BASE_URL = 'http://www.raccoonbooker.com'
 
 
@@ -76,7 +76,7 @@ DATABASES = {
         'NAME': 'raccoon',
         'USER': settings_secret.DATABASE_USER,
         'PASSWORD': settings_secret.DATABASE_PASSWORD,
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }

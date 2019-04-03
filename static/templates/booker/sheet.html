@@ -1,12 +1,12 @@
 <div class="table-container" id="table-container-{{ sheet.id }}">
     <div>
-        <h3>{{ period }}:{{ sheet.name }}<button type="button" class="btn btn-danger" style="margin-left:20px;">X</button></h3>
+        <h3>{{ period }}:{{ sheet.name }}<button type="button" class="btn btn-danger" style="margin-left:20px;" onclick="delete_sheet({{ sheet.id }})">X</button></h3>
     </div>
 
     <br>
 
     <div >
-        <table class="table table">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Pin</th>
@@ -74,6 +74,8 @@
 
     if (chart_data.length > 0 ) {
         renderChart(chart_data, container_id);
+    } else {
+        $('#'+container_id).html('<h3 align="center" style="margin-top: 25%;">No data to display<br>Add first cost</h3>')
     }
 
     if (!show_graphs) {

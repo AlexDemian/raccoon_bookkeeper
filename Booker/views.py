@@ -106,10 +106,13 @@ class SheetsView(LoginRequiredMixin, View):
         Sheets(name=request.POST.get('add_sheet_name'), date=request.POST.get('add_sheet_date'), user=request.user).save()
         return JsonResponse({'status': True})
 
-
     def post_delete(self, request):
-        pass
-
+        try:
+            Sheets.objects.get(user=request.user, id=request.POST['sheet_id']).delete()
+            return JsonResponse({'status': True})
+            
+        except ObjectDoesNotExist:
+            return JsonResponse({'status': False, 'message': 'Sheet does not exist'})
 
 class ActivitiesView(LoginRequiredMixin, View):
 
@@ -123,16 +126,24 @@ class ActivitiesView(LoginRequiredMixin, View):
 
 
     def post_add(self, request):
-        try:
-            sheet = Sheets.objects.get(id=request.POST.get("sheet"), user=request.user)
-
-        except ObjectDoesNotExist:
-            return JsonResponse({'status': False, 'message': 'Sheet does not exist'})
-
-
         form = AddActivityForm(request.POST)
-
         if form.is_valid():
+            try:
+                sheet = Sheets.objects.get(id=request.POST.get("sheet"), user=request.user)
+
+            except ObjectDoesNotExist:
+                return JsonResponse({'status': False, 'message': 'Sheet does not exist'})
+
+            try:
+                category = UserCategories.objects.get(name=request.POST.get('category'), user=request.user)
+
+            except ObjectDoesNotExist:
+                return JsonResponse({'status': False, 'message': 'Category does not exist'})
+
+            value = form.cleaned_data['value']
+
+            if (value < 0 and category.positive) or (value > 0 and not category.positive):
+                form.cleaned_data['value'] = -value
 
             kwargs = {
                 'name': form.cleaned_data['name'],
@@ -140,8 +151,8 @@ class ActivitiesView(LoginRequiredMixin, View):
                 'category': form.cleaned_data['category'],
                 'value': form.cleaned_data['value']
             }
-            Activities(user=request.user, sheet=sheet, **kwargs).save()
 
+            Activities(user=request.user, sheet=sheet, **kwargs).save()
             return JsonResponse({'status': True})
 
         else:

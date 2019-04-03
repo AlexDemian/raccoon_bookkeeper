@@ -38,12 +38,4 @@ class Activities(models.Model):
 
 
 
-class UserConfigs(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    lang = models.CharField(max_length=5, default='eng')
-    background = models.CharField(max_length=50, default='default_background.png')
-
-    class Meta:
-        db_table = 'user_confs'
-
 

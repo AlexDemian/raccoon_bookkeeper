@@ -1,4 +1,7 @@
-*secret*
-.idea/
-*.pyc
+/migrations
+/__pycache__
+/.idea
 /env
+*secret*
+*.pyc
+

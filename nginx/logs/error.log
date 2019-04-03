@@ -1,0 +1,131 @@
+2019/04/02 11:04:09 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/index.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/index.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:04:24 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/index.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/index.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:04:50 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:06:00 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:06:00 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:07:41 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:07:42 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:09:29 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:09:30 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:09:30 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:09:30 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:09:30 [error] 6#6: *1 open() "/usr/share/nginx/html/templates/booker/sheet.html" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /templates/booker/sheet.html HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:09:36 [error] 6#6: *1 open() "/usr/share/nginx/html/index" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /index HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:20:36 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:20:37 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:20:38 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:24:31 [error] 6#6: *4 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:24:34 [error] 6#6: *4 open() "/usr/share/nginx/html/index" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /index HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:24:37 [error] 6#6: *6 directory index of "/usr/share/nginx/html/" is forbidden, client: 93.75.178.250, server: localhost, request: "GET / HTTP/1.1", host: "157.230.98.38:80"
+2019/04/02 11:26:10 [error] 6#6: *4 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:26:37 [error] 6#6: *4 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:26:38 [error] 6#6: *4 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:26:58 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:26:59 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:26:59 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:26:59 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:26:59 [error] 6#6: *3 directory index of "/usr/share/nginx/html/" is forbidden, client: 171.13.14.39, server: localhost, request: "GET / HTTP/1.1", host: "raccoonbooker.com"
+2019/04/02 11:27:00 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/02 11:27:00 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "www.raccoonbooker.com"
+2019/04/03 08:15:38 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:15:38 [error] 6#6: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "157.230.98.38", referrer: "http://157.230.98.38/auth/login"
+2019/04/03 08:20:28 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:20:29 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:20:29 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:20:29 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:21:27 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:21:27 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:21:28 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:21:28 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:28:47 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:29:41 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:29:42 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:29:42 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:32:29 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:33:38 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:33:39 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:33:40 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:37:21 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:37:25 [error] 6#6: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "157.230.98.38", referrer: "http://157.230.98.38/img/favicon.png"
+2019/04/03 08:42:51 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:43:03 [error] 6#6: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "157.230.98.38", referrer: "http://157.230.98.38/img/favicon.png"
+2019/04/03 08:43:58 [error] 6#6: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "157.230.98.38", referrer: "http://157.230.98.38/img/favicon.png"
+2019/04/03 08:46:58 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:46:58 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:46:59 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:47:02 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:47:02 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:47:54 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:47:54 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:47:55 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:48:09 [error] 6#6: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "157.230.98.38", referrer: "http://157.230.98.38/img/favicon.png"
+2019/04/03 08:50:19 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:19 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:19 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:19 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:20 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:20 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:20 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:20 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:20 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:50:23 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:51:22 [error] 6#6: *3 open() "/usr/share/nginx/html/azenv.php" failed (2: No such file or directory), client: 95.213.177.125, server: localhost, request: "POST http://check.proxyradar.com/azenv.php?auth=155428148249&a=PSCMN&i=2649121318&p=80 HTTP/1.1", host: "check.proxyradar.com", referrer: "https://proxyradar.com/"
+2019/04/03 08:52:07 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:52:07 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:52:08 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:53:31 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:53:41 [error] 6#6: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "157.230.98.38", referrer: "http://157.230.98.38/img/favicon.png"
+2019/04/03 08:54:14 [error] 6#6: *2 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:54:15 [error] 6#6: *2 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:54:17 [error] 6#6: *2 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:54:18 [error] 6#6: *2 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:54:18 [error] 6#6: *2 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:54:18 [error] 6#6: *2 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:54:18 [error] 6#6: *2 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:56:19 [error] 6#6: *3 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:56:35 [error] 6#6: *5 directory index of "/usr/share/nginx/html/" is forbidden, client: 31.17.200.181, server: localhost, request: "GET / HTTP/1.0", host: "157.230.98.38"
+2019/04/03 08:57:58 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:57:59 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:58:02 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:58:02 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 08:58:02 [error] 6#6: *1 open() "/usr/share/nginx/html/auth/login" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /auth/login HTTP/1.1", host: "157.230.98.38"
+2019/04/03 09:02:58 [error] 6#6: *3 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "157.230.98.38"
+2019/04/03 09:10:03 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "157.230.98.38"
+2019/04/03 09:10:04 [error] 6#6: *1 directory index of "/usr/share/nginx/html/" is forbidden, client: 134.249.188.239, server: localhost, request: "GET / HTTP/1.1", host: "157.230.98.38"
+2019/04/03 09:10:28 [error] 6#6: *1 open() "/usr/share/nginx/html/index" failed (2: No such file or directory), client: 134.249.188.239, server: localhost, request: "GET /index HTTP/1.1", host: "157.230.98.38"
+2019/04/03 09:14:35 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:14:35 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:14:36 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:14:37 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:14:38 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:14:40 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:14:44 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:14:51 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:15:04 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 09:15:31 [emerg] 1#1: host not found in upstream "web:5000" in /etc/nginx/conf.d/raccoonbooker.conf:2
+2019/04/03 10:08:34 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:08:34 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:08:35 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:08:36 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:08:38 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:08:40 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:08:43 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:08:54 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:09:08 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:22 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:23 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:23 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:24 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:26 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:28 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:31 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:38 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 10:29:52 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 12:59:54 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 12:59:55 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 12:59:56 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 12:59:57 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 12:59:58 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 13:00:00 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 13:00:04 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17
+2019/04/03 13:00:11 [emerg] 1#1: host not found in upstream "python" in /etc/nginx/conf.d/raccoonbooker.conf:17

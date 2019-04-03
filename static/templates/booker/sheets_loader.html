@@ -11,7 +11,7 @@
             theme: "light2",
             exportFileName: "Name",
             exportEnabled: true,
-            animationEnabled: true,
+            animationEnabled: false,
             title:{
                 text: "Costs total"
             },
@@ -58,6 +58,25 @@
 
     }
 
+    function delete_sheet(sheet_id) {
+        $.post({
+            url: 'booker/api_sheets',
+            data: [
+                {name: 'csrfmiddlewaretoken', value: '{{ csrf_token }}'},
+                {name: 'sheet_id', value: sheet_id},
+                {name: 'action', value: 'delete'}
+            ],
+            dataType: 'json',
+            success: function (data) {
+                if (!data.status) {
+                    alert(data.message)
+                } else {
+                    get_all_sheets();
+                }
+                }
+            })
+        }
+
 
     function api_activity(form_data, sheet_id) {
         form_data.push({name: 'csrfmiddlewaretoken', value: '{{ csrf_token }}'});
@@ -97,7 +116,7 @@
 {% for sheet in sheets %}
     <div class="sheet-container" id="sheet-container-{{ sheet }}"></div>
 {% else %}
-    <h3 align="center"><i>No sheets created yet. Add your first one :)</i></h3>
+    <h3 align="center"><i>No sheets found. Change filters or add first one :)</i></h3>
 {% endfor %}
 
 <script>
