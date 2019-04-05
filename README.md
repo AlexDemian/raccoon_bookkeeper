@@ -9,7 +9,7 @@ docker, docker-compose
 #### Installation
 Create file: 
 
-    ./conf/secret_settings.py 
+    touch ./conf/secret_settings.py 
 
 and write your configuration by following pattern:
 
@@ -21,7 +21,8 @@ and write your configuration by following pattern:
 
 Put SSL-certs: fullchain.pem, privkey.pem at
 
-    ./nginx/certs
+    cp /yourdir/fullchain.pem ./nginx/certs
+    cp /yourdir/privkey.pem ./nginx/certs
 
 Make shure yourhost:80 and yourhost:443 is not busy.
 
