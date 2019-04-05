@@ -1,7 +1,5 @@
 import os
-from conf import settings_secret
-from .settings_secret import SECRET_KEY
-
+from secret_settings import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
@@ -9,6 +7,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 BASE_URL = 'http://www.raccoonbooker.com'
 
+SECRET_KEY = 'hayydil4zl#_=o!c#6@(94y(h_x4-+dt-7rnf$^xkqesfur1q+'
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
@@ -16,11 +15,7 @@ BROKER_URL = 'redis://%s:%s/0' % (REDIS_HOST, REDIS_PORT)
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_RESULT_BACKEND = BROKER_URL
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = settings_secret.EMAIL_USERNAME
-EMAIL_HOST_PASSWORD = settings_secret.EMAIL_PASSWORD
-EMAIL_PORT = 587
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -74,8 +69,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'raccoon',
-        'USER': settings_secret.DATABASE_USER,
-        'PASSWORD': settings_secret.DATABASE_PASSWORD,
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         'HOST': 'db',
         'PORT': '5432',
     }

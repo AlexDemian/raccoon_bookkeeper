@@ -4,9 +4,9 @@ services:
   db:
     image: postgres
     restart: always
-    environment:
-      - POSTGRES_USER=raccoon
-      - POSTGRES_PASSWORD=ahn6jii9AiX2Ahquee7u
+    env_file:
+      - ./postgres/user.env
+
 
   python:
     build: .
@@ -17,15 +17,19 @@ services:
     depends_on:
       - db
 
+    env_file:
+      - ./postgres/user.env
 
   nginx:
     image: nginx:latest
     restart: always
 
     volumes:
-      - ./nginx:/etc/nginx/conf.d/
+      - ./nginx:/etc/nginx/conf.d
       - ./static:/usr/share/nginx/html
       - ./nginx/logs:/var/log/nginx
+      - ./nginx/certs:/etc/letsencrypt
+
 
     ports:
       - 80:80
@@ -33,3 +37,4 @@ services:
 
     depends_on:
       - python
+
