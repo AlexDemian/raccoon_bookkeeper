@@ -1,0 +1,80 @@
+<style>
+    .calc-btn {
+        width: 25px;
+        height: 25px;
+        background: var(--thrd-bg-color);
+        display: inline-block;
+        text-align: center;
+        line-height: 25px;
+        user-select: none;
+        border-radius: 5px;
+        margin: 2px;
+        color: black;
+    }
+
+    .calc-btn:hover {
+        background: #f70;
+        color: #fff;
+    }
+
+    #calc {
+        width: 90%;
+        display: inline-block;
+
+    }
+
+    #inputVal {
+        width: 90%;
+        border: 0;
+        border-radius: 5px;
+        font-size: 13px;
+        resize: vertical;
+
+    }
+</style>
+<script>
+// код начнёт выполняться после загрузки страницы
+// когда окно загрузится, сработает метод window.onLoad
+window.addEventListener('load', function OnWindowLoaded() {
+    // набор кнопок
+    var signs = [
+        '1', '2', '3', '+',
+        '4', '5', '6', '-',
+        '7', '8', '9', '/',
+        '0', '=', '.', 'c'
+    ];
+
+    // форма калькулятора
+    var calc = document.getElementById('calc');
+    var textArea = document.getElementById('inputVal');
+
+    signs.forEach(function (sign) {
+        var signElement = document.createElement('div');
+        signElement.className = 'calc-btn';
+        signElement.innerHTML = sign;
+        calc.appendChild(signElement);
+    });
+
+    document.querySelectorAll('#calc-wrap .calc-btn').forEach(function (button) {
+        button.addEventListener('click', onButtonClick);
+    });
+
+    function onButtonClick(e) {
+        if (e.target.innerHTML === 'c') {
+            textArea.innerHTML = '0';
+        } else if (e.target.innerHTML === '=') {
+            textArea.innerHTML = eval(textArea.innerHTML);
+        } else if (textArea.innerHTML === '0') {
+            textArea.innerHTML = e.target.innerHTML;
+        } else {
+            textArea.innerHTML += e.target.innerHTML;
+        }
+    }
+});
+</script>
+
+<div id="calc-wrap">
+    <div id="calc">
+        <textarea id=inputVal>0</textarea>
+    </div>
+</div>

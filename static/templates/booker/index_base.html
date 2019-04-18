@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-
 {% block content %}
+
 <style>
 
 
@@ -16,6 +16,7 @@
     .sheet-container {
         margin-bottom: 100px;
         min-height: 500px;
+        padding-top: 10px;
 
 
     }
@@ -39,32 +40,38 @@
         top: 50px;
         width: 150px;
         height: calc(100% - 50px);
-        background-color: #4e4882;
+        background-color: var(--sec-bg-color);
         color: white;
         border-right: 2px solid black;
         box-shadow: 2px 0px 5px gray;
     }
 
-    .menu-field {
+    .right-menu-field {
         margin-top: 5px;
         margin-right: 5px;
         margin-left: 5px;
     }
 
     .horizontal-separator {
-        background-color: black;
+        background-color:#ed9c33;
         height: 2px;
         width: 100%;
-        box-shadow: 0px 3px 5px white;
+        box-shadow: 0px 3px 5px #edcd84;
 
     }
 
-    .row-field {
-        width: 20%;
-        display: inline-block;
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
     }
+
+
 
 </style>
+
+
+
 
 
 
@@ -75,9 +82,9 @@
         <input type="hidden" name="target" value="sheets_ids">
         Sheet filters:
         {% for field in filter_form %}
-            <div class="menu-field">{{ field }}</div>
+            <div class="right-menu-field">{{ field }}</div>
         {% endfor %}
-        <button class="btn btn-info menu-field" type="button" onclick="get_all_sheets()">Filter it!</button>
+        <button class="nav-button yellow-button round-button" type="button" onclick="get_all_sheets()">Filter it!</button>
     </form>
     <br>
     <div class="horizontal-separator"></div>
@@ -87,22 +94,26 @@
         <input type="hidden" name="action" value="add">
         Add sheet:
         {% for field in add_sheet_form %}
-            <div class="menu-field">{{ field }}</div>
+            <div class="right-menu-field">{{ field }}</div>
         {% endfor %}
-        <button class="btn btn-info menu-field"  type="button"  onclick="add_sheet()">Add!</button>
+        <button class="nav-button yellow-button round-button"  type="button"  onclick="add_sheet()">Add!</button>
     </form>
     <br>
     <div class="horizontal-separator"></div>
     <br>
-    <button class="btn btn-info menu-field"  type="button"  onclick="showHideGpaphs();">Show/hide charts</button>
-
+    {% include 'booker/calc.html' %}
+    <br>
+    <div class="horizontal-separator"></div>
+    <br>
+    <button class="nav-button yellow-button round-button"  type="button"  onclick="showHideGpaphs();">Show/hide charts</button>
+    <br>
 </div>
 
 <div id="child_container"></div>
 
 
 <script>
-    var show_graphs = true;
+
 
     function get(url, args, result_to) {
         $.get(url, args)
@@ -142,16 +153,12 @@
     $(".select2_bootstrap").select2();
     get_all_sheets();
 
+    window.show_charts = true;
+    Vue.prototype.show_charts = window.show_charts;
+
     function showHideGpaphs() {
-        if (show_graphs) {
-            $('.chart-container').hide();
-            $('.table-container').width('100%');
-            show_graphs = false;
-        } else {
-             $('.chart-container').show();
-             $('.table-container').width('70%');
-            show_graphs = true;
-        }
+        window.show_charts = !window.show_charts;
+        Vue.prototype.show_charts = window.show_charts;
     }
 
 

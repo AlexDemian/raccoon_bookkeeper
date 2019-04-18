@@ -23,12 +23,19 @@ class User(AbstractUser):
         self.save()
 
     def custom_save(self):
-        from UserConfs.models import UserCategories, default_categories
+        from UserConfs.models import UserCategories, default_sheetbases, SheetBases
+
         user = User.objects.create_user(username=self.username, password=self.password)
         user.save()
-        for cat in default_categories:
-            cat.update({'user': user})
-            UserCategories(**cat).save()
+
+        for bsheet in default_sheetbases:
+            sbase = SheetBases(user=user, name=bsheet['name'])
+            sbase.save()
+            for cat in bsheet['categories']:
+                cat.update({'user': user, 'sheetbase': sbase})
+                UserCategories(**cat).save()
+
+
         return user
 
     @staticmethod

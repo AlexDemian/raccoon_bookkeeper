@@ -5,7 +5,12 @@
     <title>Raccoon booker</title>
     <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.0.js"
+    integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo="
+    crossorigin="anonymous"
+    ></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -13,17 +18,39 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.7.0/qs.js"></script>
+    <script>axios.defaults.xsrfCookieName = 'csrftoken'; axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";</script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>Vue.options.delimiters = ['[[',']]'];</script>
+
+    
 </head>
 <body>
 {% block navbar %}
     <style>
+
+        :root {
+            --nav-bg-color: white;
+            --btn-box-shadow-on-nav: 0 5px 20px violet;
+
+            --main-bg-color: #e6e6e6;
+            --btn-box-shadow-on-main: 0 5px 20px violet;
+
+            --sec-bg-color: #1d2d3f;
+            --btn-box-shadow-on-sec: 0 5px 20px #4e79ab;
+
+            --thrd-bg-color: #ed9c33;
+
+        }
+
+
         nav {
             width: 100%;
             height: 50px;
-            background-color: white;
-            border-bottom: 3px solid #4e4882;
-           }
+            background-color: var(--nav-bg-color);
+            border-bottom: 3px solid var(--thrd-bg-color);
+        }
 
 
         #logout_form {
@@ -32,17 +59,25 @@
         }
 
         #logo_label {
-            position: absolute;
+            color: black;
+            top: 3px;
             left: 12%;
+            position: absolute;
             width: 300px;
             height: 40px;
             border-radius: 100px;
-            border: #4e4882 solid 3px;
+            border: var(--sec-bg-color) solid 3px;
             text-align: center;
             font-weight: bold;
             font-size: 25px;
             font-family: "Segoe Print";
         }
+
+        #logo_label:hover {
+            box-shadow: var(--btn-box-shadow-on-sec);
+            transform:scale(1.05,1.05);
+        }
+
 
         #logo-image-container {
             position: absolute;
@@ -56,7 +91,11 @@
             height: 120px;
         }
 
-        #navbar_buttons {
+        #logo-image:hover {
+            transform:scale(1.05,1.05);
+        }
+
+        #navbar_menu {
             position: absolute;
             left: 33%;
             width: 70%;
@@ -69,6 +108,27 @@
         #nav-greetings {
             margin-right: 10px;
             font-size: 15px;
+            color: black;
+        }
+
+        .nav-button {
+            border: var(--sec-bg-color) solid 2px;
+            color: black;
+            font-weight: 700;
+            margin-top: 5px;
+            margin-left: 5px;
+            margin-right: 5px;
+            height: 35px;
+            border-radius: 20px;
+        }
+
+        .nav-button:hover {
+            box-shadow: var(--btn-box-shadow-on-sec);
+            transform:scale(1.1,1.1);
+        }
+
+        .yellow-button {
+            background-color: var(--thrd-bg-color);
             color: black;
         }
 
@@ -85,28 +145,31 @@
             <div class="navbar-collapse collapse">
 
                 <a class="navbar-brand" href="index" id="logo-image-container">
-                    <img src="img/logo_original.png" id="logo-image" class="d-inline-block align-center" alt=""></a>
+                    <img src="img/logo_original.png" id="logo-image" class="d-inline-block align-center" alt="">
+                </a>
 
-                <div id="logo_label">
+                <a href="/index" >
+                  <div id="logo_label">
                     <i>Raccoon booker</i>
-                </div>
+                  </div>
+                </a>
 
-                <div id="navbar_buttons">
+                <div id="navbar_menu">
                     <div class="div_navbar_button">
-                        <form  action="./user_confs" method="get">
-                            <button type="submit" class="btn btn-md btn-outline-info" style="margin-left: 30px;">Settings</button>
+                        <form  action="./settings" method="get">
+                            <button type="submit" class="btn btn-md nav-button round-button" style="margin-left: 30px;">Settings</button>
                         </form>
                     </div>
 
                     <div class="div_navbar_button">
                         <form  action="/about" method="get" >
-                            <button type="submit" class="btn btn-md btn-outline-info" style="margin-left: 30px;">About</button>
+                            <button type="submit" class="btn btn-md nav-button round-button" style="margin-left: 30px;">About</button>
                         </form>
                     </div>
 
                     <div class="div_navbar_button">
                         <form  action="/donate" method="get" >
-                            <button type="submit" class="btn btn-md btn-outline-info" style="margin-left: 30px;">
+                            <button type="submit" class="btn btn-md nav-button round-button" style="margin-left: 30px;">
                                 <i class="glyphicon glyphicon-heart red" style="color:#DC143C"></i> Donate <i class="glyphicon glyphicon-heart" style="color:#DC143C"></i>
                             </button>
                          </form>
@@ -121,13 +184,18 @@
             <div id="logout_form" class="navbar-collapse collapse">
                 <ul class="navbar-nav mr-auto"></ul>
                 <div id="nav-greetings">Welcome back, {{ user }}!</div>
-                <form action="../auth/logout" method="POST" >
+                <form action="/auth/logout" method="POST" >
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                    <button type="submit" class="btn btn-md btn-outline-info" >Logout</button>
+                    <button type="submit" class="btn btn-md nav-button round-button" >Logout</button>
                 </form>
             </div>
         </div>
     </nav>
+
+<br>
+<br>
+<br>
+
 {% endblock %}
 
 <script>
@@ -160,7 +228,6 @@
     }
 </style>
 {% endblock %}
-
 
 {% block content %}
 {% endblock %}

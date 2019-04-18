@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from Auth.models import User
+from UserConfs.models import SheetBases
 
 from unixtimestampfield.fields import UnixTimeStampField
 from django.contrib.postgres.fields import ArrayField
@@ -13,14 +14,12 @@ import time
 
 class Sheets(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    sheetbase = models.ForeignKey(SheetBases, on_delete=models.CASCADE)
     date = models.DateField()
     comment = models.CharField(max_length=1000)
 
     class Meta:
         db_table = 'booker_sheets'
-
-
 
 
 class Activities(models.Model):

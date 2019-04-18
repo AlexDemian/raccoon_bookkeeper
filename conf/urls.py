@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^$|index', Index.as_view()),
     url(r'^auth/', include('Auth.urls')),
     url(r'^booker/', include('Booker.urls')),
+    url(r'^settings/', include('UserConfs.urls')),
     ]

@@ -24,10 +24,12 @@ Put SSL-certs: fullchain.pem, privkey.pem at
     cp /yourdir/fullchain.pem ./nginx/certs
     cp /yourdir/privkey.pem ./nginx/certs
 
-Make shure yourhost:80 and yourhost:443 is not busy.
+Make shure yourhost:80 and yourhost:443 are not busy.
 
 Make it run!
+Add -d flag for detached mode
 
 
     docker-compose up
-
+    # OR
+    docker-compose up -d 

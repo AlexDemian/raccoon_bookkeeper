@@ -1,85 +1,339 @@
-<div class="table-container" id="table-container-{{ sheet.id }}">
-    <div>
-        <h3>{{ period }}:{{ sheet.name }}<button type="button" class="btn btn-danger" style="margin-left:20px;" onclick="delete_sheet({{ sheet.id }})">X</button></h3>
-    </div>
+<style>
+    .table-edit-field {
+        border: none;
+        background: transparent;
+        outline-width: 0;
+    }
 
-    <br>
 
-    <div >
-        <table class="table">
-            <thead>
+
+    .tr-total {
+        font-weight: 700;
+        border-top: var(--thrd-bg-color) solid 2px;
+        border-bottom: var(--thrd-bg-color) solid 2px;
+        font-size: 15px;
+    }
+
+
+    .table-button {
+        background-color: transparent;
+        color: black;
+        width: 40px;
+        height: 40px;
+        border: var(--sec-bg-color) solid 2px;;
+        border-radius: 40px;
+        font-weight: bold;
+    }
+
+    .table-button:hover {
+        transform:scale(1.2,1.2);
+        background-color: var(--thrd-bg-color);
+        box-shadow: var(--thrd-bg-color) 0px 0px 10px;
+    }
+
+    .table-image-button, .table-text-button {
+        background-color: transparent;
+        border: none;
+    }
+
+    .table-image-button:focus, .table-text-button:focus {
+        outline: none;
+    }
+
+
+</style>
+
+<div id="vue-sheet-{{ sheet.id }}">
+    <div class="table-container" id="table-container-{{ sheet.id }}">
+        <div>
+            <div>
+                <h3>{{ period }}:{{ sheet.sheetbase.name }}<button type="button" class="table-button" style="margin-left:20px;" @click="delete_sheet()">X</button></h3>
+            </div>
+
+            <table class="table" style="text-align: left;">
+
+              <thead v-show="rows.length">
+                <tr class="tr-total">
+
+                  <th v-for="column in columns">
+                    <button  @click="change_sortField(column.sortKey)" class="table-text-button">[[ column.label ]]</button>
+                    <a v-show="sortField == column.sortKey" :class="'fa fa-arrow-' + [ sortReverse === -1 ? 'up' : 'down' ]" @click="change_sortField(column.sortKey)"/>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr v-for="(row,index) in sorted_rows">
+                  <td>[[ index ]]</td>
+                  <td>
+                      <button v-on:click="pin_row(index)" class="table-image-button">
+                          <img :src="'/img/booker/' + [ row.fields.pinned ? 'pinned' : 'unpinned' ] + '.png'" style="width: 30px; height: 30px" />
+                      </button>
+                  </td>
+                  <td>
+                     <input class="table-edit-field" v-on:blur="update_row(index)" v-model="row.fields.name" type="text" required>
+                  </td>
+                  <td>
+                      <input class="table-edit-field" v-on:blur="update_row(index)" v-model="row.fields.descr" type="text" >
+                  </td>
+                  <td>
+                    <select class="form-control" v-model="row.fields.category" @change="update_row(index); chartUpdated = !chartUpdated;">
+                        <option v-for="cat in categories">[[ cat.fields.name ]]</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input class="table-edit-field" @blur="update_row(index);" @keyup="format_value(row); chartUpdated = !chartUpdated" v-model.number="row.fields.value" type="number" required>
+                  </td>
+                  <td style="width: 18%;">
+                    <button class="table-button" type="button" @click="delete_row(index);">X</button>
+                  </td>
+                </tr>
+
                 <tr>
-                    <th>Pin</th>
-                    <th>Name *</th>
-                    <th>Description</th>
-                    <th>Category *</th>
-                    <th>Price *</th>
-                    <th>Action</th>
+                    <td></td>
+                    <td></td>
+                  <td>
+                    <div>
+                      <input class="form-control" placeholder="Name" v-model="input.name" id="name" type="text" required>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <input class="form-control" placeholder="Description" v-model="input.descr" id="descr" type="text">
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                       <select class="form-control" v-model="input.category">
+                        <option v-for="cat in categories">[[ cat.fields.name ]]</option>
+                       </select>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <input class="form-control" placeholder="123" v-model.number="input.value" id="value" type="number" required>
+                    </div>
+                  </td>
+
+                  <td><button @click="add_row" class="table-button">Add</button></td>
                 </tr>
-            </thead>
 
-            <tbody>
-
-                {% for act in activities %}
-                    <tr>
-                        <td>Pin</td>
-                        <td>{{ act.name }}</td>
-                        <td>{{ act.descr }}</td>
-                        <td>{{ act.category }}</td>
-                        <td>{{ act.value }}</td>
-                        <td>
-                            <button class="btn btn-danger btn-sm" type="button" onclick="delete_activity({{ act.id }}, {{ sheet.id }})">EDIT</button>
-                            <button class="btn btn-danger btn-sm" type="button" onclick="delete_activity({{ act.id }}, {{ sheet.id }})">X</button>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr><td colspan="6" align="center"></td></tr>
-                    <tr><td colspan="6" align="center"><h3>No activities. Add new.</h3></td></tr>
-                    <tr><td colspan="6" align="center"></td></tr>
-                {% endfor %}
-                <tr style="font-weight: 700; border: lightgray solid 2px">
-                    {% set delta = (earnings_sum + costs_sum) %}
+                <tr class="tr-total" v-show="rows.length">
+                    <td></td>
+                    <td></td>
                     <td>Total:</td>
-                    <td>Earnings: {{ earnings_sum }}</td>
-                    <td>Costs: {{ costs_sum }}</td>
-                    <td style="color: {{ 'black' if delta >= 0 else 'red' }}">Delta: {{ delta }}</td>
-                    <td></td>
+                    <td>Earnings: [[ earnings ]]</td>
+                    <td>Costs: [[ costs ]]</td>
+                    <td :style="'color: ' + [ delta < 0 ? 'red' : 'green' ]">Delta: [[ delta ]]</td>
                     <td></td>
                 </tr>
-            </tbody>
 
-        </table>
 
+              </tbody>
+            </table>
+        </div>
     </div>
 
-    <br>
+    <div class="chart-container" id="chart-container-{{ sheet.id }}" :style="'width: ' + [ this.show_charts ? '30%': '0']">
+        <template v-if="chartData.length > 0">
 
-    <div>
-        <form id="add-act-{{ sheet.id }}">
-            <input type="hidden" name="sheet" value="{{ sheet.id }}">
-            <div class="row-field">{{ add_activity_form.name }}</div>
-            <div class="row-field">{{ add_activity_form.descr if add_activity_form.descr else '-' }}</div>
-            <div class="row-field" style="width: 15%">{{ add_activity_form.category }}</div>
-            <div style="display: inline-block; width: 4%;"><button class="fa fa-edit" type="button" style="width: 50px; height: 30px;"></button></div>
-            <div class="row-field">{{ add_activity_form.value }}</div>
-            <button class="btn btn-info btn-sm" type="button" onclick="add_activity($('#add-act-{{ sheet.id }}'), {{ sheet.id }})">ADD</button>
-        </form>
+        </template>
+
+        <template v-else>
+            <h3 align="center" style="margin-top: 25%;">No data to display<br>Add first cost</h3>
+        </template>
     </div>
 </div>
 
-<div class="chart-container" id="chart-container-{{ sheet.id }}" ></div>
-<script>
-    var chart_data = {{ chart_data|safe }};
-    var container_id = 'chart-container-{{ sheet.id }}';
 
-    if (chart_data.length > 0 ) {
-        renderChart(chart_data, container_id);
-    } else {
-        $('#'+container_id).html('<h3 align="center" style="margin-top: 25%;">No data to display<br>Add first cost</h3>')
-    }
 
-    if (!show_graphs) {
-        $('#chart-container-{{ sheet.id }}').hide();
-        $('#table-container-{{ sheet.id }}').width('100%');
-    }
+
+
+
+<script >
+    // Todo!: table sorting, Vue instance destroy
+    var activities = JSON.parse({{ activities|safe|tojson }});
+    var sheet = {{ sheet.id }};
+    var categories = JSON.parse({{ categories|safe|tojson }})
+
+    vueTable{{ sheet.id }} = new Vue({
+        el: '#vue-sheet-{{ sheet.id }}',
+
+        data: {
+            columns: [
+                {label:'#', sortKey: NaN},
+                {label:'Pin', sortKey: 'pinned'},
+                {label:'Name', sortKey: 'name'},
+                {label:'Description', sortKey: 'descr'},
+                {label:'Category', sortKey:'category'},
+                {label:'Price', sortKey:'value'},
+                {label:'Action', sortKey: NaN}
+            ],
+            rows: activities,
+            input: {
+                name: 'Test',
+                category: 'meal',
+                descr: '',
+                value: 100
+            },
+            categories: categories,
+            show_charts: show_charts,
+            sheet: sheet,
+            isAlive: true,
+            sortField: 'pinned',
+            sortReverse: -1,
+            chartUpdated: false
+        },
+
+       methods: {
+        add_row: function() {
+
+            this.rows.push(
+                {
+                    fields:
+                        {
+                            pinned: false,
+                            name: this.input.name,
+                            category: this.input.category,
+                            descr: this.input.descr,
+                            value: this.input.value,
+                            sheet: this.sheet
+                        }
+                });
+            let index = this.rows.length-1;
+            axios.post('/booker/add_activity', JSON.stringify(this.rows[index].fields)).then(response => (
+                    this.rows[index].pk = response.data.id
+            ));
+
+        },
+
+        delete_row: function(index) {
+            axios.post('/booker/delete_activity', JSON.stringify({'id': this.rows[index].pk}));
+            this.rows.splice(index, 1);
+        },
+
+        update_row: function(index) {
+            let kwargs = this.rows[index].fields;
+            kwargs.id = this.rows[index].pk;
+            axios.post('/booker/update_activity', JSON.stringify(this.rows[index].fields));
+        },
+
+        pin_row: function (index) {
+            this.rows[index].fields.pinned = !this.rows[index].fields.pinned;
+            this.update_row(index);
+        },
+        
+        delete_sheet: function () {
+            this.isAlive=false;
+            axios.post('/booker/delete_sheet', JSON.stringify({sheet_id: this.sheet}));
+        },
+           
+        table_sorter: function (r1, r2) {
+            if (r1.fields[this.sortField]> r2.fields[this.sortField])
+                return this.sortReverse;
+            if (r1.fields[this.sortField] < r2.fields[this.sortField])
+                return -this.sortReverse;
+            return 0;
+        },
+
+        change_sortField: function(key){
+            if (this.sortField === key)
+                this.sortReverse = -this.sortReverse;
+            else
+                this.sortReverse = -1;
+
+            this.sortField = key
+
+        },
+
+        format_value: function(row)  {
+            this.categories.forEach(function(cat){
+                if (!cat.fields.positive && cat.fields.name === row.fields.category) {
+                    row.fields.value = -Math.abs(row.fields.value)
+                } else if (cat.fields.positive && cat.fields.name === row.fields.category) {
+                    row.fields.value = Math.abs(row.fields.value)
+                }
+            });
+        }
+
+       },
+
+       computed: {
+            costs: function() {
+                var total = 0;
+                this.rows.forEach(function (row) {
+                    if(row.fields.value < 0) {
+                        total += row.fields.value;
+                    }
+                });
+
+                return total;
+            },
+
+            earnings: function() {
+                var total = 0;
+                this.rows.forEach(function (row) {
+
+                    if(row.fields.value > 0) {
+                        total += row.fields.value;
+                    }
+                });
+
+                return total;
+            },
+
+            delta: function() {
+                return this.costs + this.earnings;
+
+            },
+
+            sorted_rows: function () {
+               return this.rows.sort(this.table_sorter);
+            },
+
+            chartData: function() {
+                sums = {};
+                this.rows.forEach(function(row) {
+                     if (row.fields.value < 0) {
+                        if(!sums.hasOwnProperty(row.fields.category)) {
+                            sums[row.fields.category] = {y: 0, name: row.fields.category}
+                        }
+                        sums[row.fields.category].y += row.fields.value
+                    }
+
+                    //if (row.fields.category === cat.fields.name) {
+                    //    cat.sum += row.fields.value;
+                    //}
+                });
+
+                res = [];
+
+                for (const [key, value] of Object.entries(sums)) {
+                  res.push(value)
+                }
+
+
+                console.log(res);
+                return res
+            }
+
+       }
+
+    });
+
+    vueTable{{ sheet.id }}.$watch('isAlive', function () {
+        $("#sheet-container-{{ sheet.id }}").remove();
+    });
+
+    vueTable{{ sheet.id }}.$watch('chartUpdated', function () {
+        renderChart(vueTable{{ sheet.id }}.chartData, 'chart-container-{{ sheet.id }}')
+    });
+
+    vueTable{{ sheet.id }}.$watch('rows', function () {
+        renderChart(vueTable{{ sheet.id }}.chartData, 'chart-container-{{ sheet.id }}')
+    });
+    renderChart(vueTable{{ sheet.id }}.chartData, 'chart-container-{{ sheet.id }}');
+
+
 </script>
+

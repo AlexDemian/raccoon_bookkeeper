@@ -1,7 +1,7 @@
 from django.forms import ModelForm, Form
 from django import forms
 from .models import Activities
-from UserConfs.models import UserCategories
+from UserConfs.models import UserCategories, SheetBases
 import datetime
 import calendar
 
@@ -69,9 +69,12 @@ def period_select2(field_id):
     cur_date, date_choicelist = getDateSet()
     return generic_select2(field_id, date_choicelist, initial=cur_date)
 
+def basesheet_select2(field_id, uid):
+    choices = [(s.id, s.name) for s in SheetBases.objects.filter(user_id=uid)]
+    return generic_select2(field_id, choices)
 
 class AddSheetForm(Form):
-    add_sheet_name = generic_char_input('add_sheet_name', max_length=50, placeholder='sheet name')
+    add_sheetbase_id = basesheet_select2('add_sheetbase_id', 2)
     add_sheet_date = period_select2('add_sheet_period')
 
 class FiltersForm(Form):

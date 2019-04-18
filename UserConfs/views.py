@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.views import View
 
-# Create your views here.
+
+class SettingsView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'user_confs/index.html')

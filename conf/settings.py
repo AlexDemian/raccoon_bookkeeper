@@ -1,5 +1,5 @@
 import os
-from secret_settings import *
+from .secret_settings import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
@@ -45,8 +45,23 @@ LOGIN_URL = 'auth/signin_form'
 STATIC_URL = 'templates/static/'
 STATIC_ROOT = 'templates/static/'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler'
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}
 
-
+CSRF_COOKIE_NAME = "csrftoken"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
