@@ -6,10 +6,10 @@
 
     #child_container {
         position: absolute;
-        top: 150px;
+        top: 80px;
         margin-left: 200px;
         width: 88%;
-        height: 80%;
+        height: 90%;
         overflow-y: scroll;
     }
 
@@ -44,6 +44,8 @@
         color: white;
         border-right: 2px solid black;
         box-shadow: 2px 0px 5px gray;
+        font-weight: 500;
+        font-size: 14px;
     }
 
     .right-menu-field {
@@ -71,20 +73,15 @@
 </style>
 
 
-
-
-
-
 <div id="menu_container" align="center">
-
-
+    <br>
     <form id="filters_form">
         <input type="hidden" name="target" value="sheets_ids">
         Sheet filters:
         {% for field in filter_form %}
             <div class="right-menu-field">{{ field }}</div>
         {% endfor %}
-        <button class="nav-button yellow-button round-button" type="button" onclick="get_all_sheets()">Filter it!</button>
+        <button class="nav-button yellow-button round-button" style="margin-top: 10px" type="button" onclick="get_all_sheets()">Filter</button>
     </form>
     <br>
     <div class="horizontal-separator"></div>
@@ -93,20 +90,19 @@
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
         <input type="hidden" name="action" value="add">
         Add sheet:
-        {% for field in add_sheet_form %}
-            <div class="right-menu-field">{{ field }}</div>
-        {% endfor %}
-        <button class="nav-button yellow-button round-button"  type="button"  onclick="add_sheet()">Add!</button>
+        <div class="right-menu-field">{{  add_sheet_form["add_sheetbase_id"] }}</div>
+        <div class="right-menu-field">{{  add_sheet_form["add_sheet_date"] }}</div>
+        <button class="nav-button yellow-button round-button"  style="margin-top: 10px" type="button"  onclick="add_sheet()">Add</button>
     </form>
     <br>
     <div class="horizontal-separator"></div>
     <br>
+    Calculator:
     {% include 'booker/calc.html' %}
     <br>
     <div class="horizontal-separator"></div>
     <br>
-    <button class="nav-button yellow-button round-button"  type="button"  onclick="showHideGpaphs();">Show/hide charts</button>
-    <br>
+
 </div>
 
 <div id="child_container"></div>
@@ -127,19 +123,10 @@
         get('booker/api_sheets', args, $('#child_container'));
     }
 
-    function add_category() {
-        $.post('booker/api_categories', $('#add_category_form').serializeArray())
-        .done(function( data ) {
-            if (!data.status) {
-            alert(data.message);
-            }
-        });
-    }
-
 
     function add_sheet() {
 
-        $.post('booker/api_sheets', $('#add_sheet_form').serializeArray())
+        $.post('booker/create_sheet', $('#add_sheet_form').serializeArray())
             .done(function( data ) {
                 if (!data.status) {
                 alert(data.message);
@@ -153,13 +140,6 @@
     $(".select2_bootstrap").select2();
     get_all_sheets();
 
-    window.show_charts = true;
-    Vue.prototype.show_charts = window.show_charts;
-
-    function showHideGpaphs() {
-        window.show_charts = !window.show_charts;
-        Vue.prototype.show_charts = window.show_charts;
-    }
 
 
 

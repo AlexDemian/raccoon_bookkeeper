@@ -19,37 +19,119 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.7.0/qs.js"></script>
+
     <script>axios.defaults.xsrfCookieName = 'csrftoken'; axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";</script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <script>Vue.options.delimiters = ['[[',']]'];</script>
 
     
 </head>
 <body>
-{% block navbar %}
+{% block style %}
     <style>
+        body {
+            background-image: url('../img/backgrounds/default_background.jpg');
+            background-repeat: repeat;
+        }
+
+        html, body{
+            font-size: 13px;
+        }
+
+
 
         :root {
             --nav-bg-color: white;
-            --btn-box-shadow-on-nav: 0 5px 20px violet;
-
             --main-bg-color: #e6e6e6;
-            --btn-box-shadow-on-main: 0 5px 20px violet;
-
             --sec-bg-color: #1d2d3f;
             --btn-box-shadow-on-sec: 0 5px 20px #4e79ab;
-
             --thrd-bg-color: #ed9c33;
 
         }
 
+        .nav-button {
+            border: var(--sec-bg-color) solid 2px;
+            color: black;
+            font-weight: 700;
+            margin-left: 5px;
+            margin-right: 5px;
+            height: 35px;
+            border-radius: 20px;
+        }
+
+        .nav-button:hover {
+            box-shadow: var(--btn-box-shadow-on-sec);
+            transform:scale(1.1,1.1);
+        }
+
+
+        .table-button {
+            background-color: transparent;
+            color: black;
+            border: var(--sec-bg-color) solid 2px;;
+            border-radius: 40px;
+            font-weight: bold;
+        }
+
+        .table-button:hover {
+            transform:scale(1.2,1.2);
+            background-color: var(--thrd-bg-color);
+            box-shadow: var(--thrd-bg-color) 0px 0px 10px;
+        }
+
+        .yellow-button {
+            background-color: var(--thrd-bg-color);
+            color: black;
+        }
+
+        .table-image-button, .table-text-button {
+            background-color: transparent;
+            border: none;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .sml-button {
+            width: 25px;
+            height: 25px;
+        }
+
+        .mdm-button {
+            width: 30px;
+            height: 30px;
+        }
+
+        .big-button {
+            width: 40px;
+            height: 40px;
+        }
+
+        .tr-total {
+            font-weight: 700;
+            border-top: var(--thrd-bg-color) solid 2px;
+            border-bottom: var(--thrd-bg-color) solid 2px;
+            font-size: 15px;
+        }
+
+
+
+
+    </style>
+{% endblock %}
+
+{% block navbar %}
+    <style>
 
         nav {
             width: 100%;
             height: 50px;
             background-color: var(--nav-bg-color);
             border-bottom: 3px solid var(--thrd-bg-color);
+            box-shadow: var(--thrd-bg-color) 0px 2px 10px;
+            background-image: url('../img/backgrounds/nav_background.png');
         }
 
 
@@ -85,11 +167,6 @@
             opacity: 100%;
         }
 
-        #logo-image {
-            margin-top: 10px;
-            width: 120px;
-            height: 120px;
-        }
 
         #logo-image:hover {
             transform:scale(1.05,1.05);
@@ -111,26 +188,6 @@
             color: black;
         }
 
-        .nav-button {
-            border: var(--sec-bg-color) solid 2px;
-            color: black;
-            font-weight: 700;
-            margin-top: 5px;
-            margin-left: 5px;
-            margin-right: 5px;
-            height: 35px;
-            border-radius: 20px;
-        }
-
-        .nav-button:hover {
-            box-shadow: var(--btn-box-shadow-on-sec);
-            transform:scale(1.1,1.1);
-        }
-
-        .yellow-button {
-            background-color: var(--thrd-bg-color);
-            color: black;
-        }
 
 
 
@@ -145,31 +202,31 @@
             <div class="navbar-collapse collapse">
 
                 <a class="navbar-brand" href="index" id="logo-image-container">
-                    <img src="img/logo_original.png" id="logo-image" class="d-inline-block align-center" alt="">
+                    <img src="img/logo_nav.png" id="logo-image" class="d-inline-block align-center" alt="">
                 </a>
 
                 <a href="/index" >
                   <div id="logo_label">
-                    <i>Raccoon booker</i>
+                    <i>Raccoon Booker</i>
                   </div>
                 </a>
 
                 <div id="navbar_menu">
                     <div class="div_navbar_button">
                         <form  action="./settings" method="get">
-                            <button type="submit" class="btn btn-md nav-button round-button" style="margin-left: 30px;">Settings</button>
+                            <button type="submit" class="btn btn-md nav-button" style="margin-left: 30px;">Settings</button>
                         </form>
                     </div>
 
                     <div class="div_navbar_button">
                         <form  action="/about" method="get" >
-                            <button type="submit" class="btn btn-md nav-button round-button" style="margin-left: 30px;">About</button>
+                            <button type="submit" class="btn btn-md nav-button" style="margin-left: 30px;">About</button>
                         </form>
                     </div>
 
                     <div class="div_navbar_button">
                         <form  action="/donate" method="get" >
-                            <button type="submit" class="btn btn-md nav-button round-button" style="margin-left: 30px;">
+                            <button type="submit" class="btn btn-md nav-button" style="margin-left: 30px;">
                                 <i class="glyphicon glyphicon-heart red" style="color:#DC143C"></i> Donate <i class="glyphicon glyphicon-heart" style="color:#DC143C"></i>
                             </button>
                          </form>
@@ -216,18 +273,7 @@
 </script>
 
 
-{% block style %}
-<style>
-    body {
-        background-image: url('../img/backgrounds/default_background.png');
-        background-repeat: repeat;
-    }
 
-    html, body{
-        font-size: 13px;
-    }
-</style>
-{% endblock %}
 
 {% block content %}
 {% endblock %}

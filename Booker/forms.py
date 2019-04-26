@@ -74,8 +74,12 @@ def basesheet_select2(field_id, uid):
     return generic_select2(field_id, choices)
 
 class AddSheetForm(Form):
-    add_sheetbase_id = basesheet_select2('add_sheetbase_id', 2)
+
     add_sheet_date = period_select2('add_sheet_period')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['add_sheetbase_id'] =  basesheet_select2('add_sheetbase_id', 2)
 
 class FiltersForm(Form):
     cur_date, date_choicelist = getDateSet()

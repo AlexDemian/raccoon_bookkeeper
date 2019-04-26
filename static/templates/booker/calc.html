@@ -17,64 +17,49 @@
         color: #fff;
     }
 
-    #calc {
+    #calculator {
         width: 90%;
         display: inline-block;
 
     }
 
-    #inputVal {
+    .calc-text-area {
+        margin-top: 5px;
         width: 90%;
         border: 0;
         border-radius: 5px;
         font-size: 13px;
         resize: vertical;
-
+        margin-right: 5%;
     }
 </style>
+
+
+<div id="calc-wrap">
+    <div id="calculator">
+        <textarea class="calc-text-area" v-model="input" placeholder="3*5/(3-1+2)"></textarea>
+        <br>
+        <input class="calc-text-area" disabled :value="'= ' + [calculated ? calculated : 0]"/>
+    </div>
+</div>
+
 <script>
-// код начнёт выполняться после загрузки страницы
-// когда окно загрузится, сработает метод window.onLoad
-window.addEventListener('load', function OnWindowLoaded() {
-    // набор кнопок
-    var signs = [
-        '1', '2', '3', '+',
-        '4', '5', '6', '-',
-        '7', '8', '9', '/',
-        '0', '=', '.', 'c'
-    ];
-
-    // форма калькулятора
-    var calc = document.getElementById('calc');
-    var textArea = document.getElementById('inputVal');
-
-    signs.forEach(function (sign) {
-        var signElement = document.createElement('div');
-        signElement.className = 'calc-btn';
-        signElement.innerHTML = sign;
-        calc.appendChild(signElement);
-    });
-
-    document.querySelectorAll('#calc-wrap .calc-btn').forEach(function (button) {
-        button.addEventListener('click', onButtonClick);
-    });
-
-    function onButtonClick(e) {
-        if (e.target.innerHTML === 'c') {
-            textArea.innerHTML = '0';
-        } else if (e.target.innerHTML === '=') {
-            textArea.innerHTML = eval(textArea.innerHTML);
-        } else if (textArea.innerHTML === '0') {
-            textArea.innerHTML = e.target.innerHTML;
-        } else {
-            textArea.innerHTML += e.target.innerHTML;
+new Vue({
+    el: '#calculator',
+    data: {
+        input: '',
+        output: '',
+        regexPatt: "/[^0-9|+|-]+/g"
+    },
+    computed: {
+        calculated: function () {
+            try {
+                return eval(this.input.replace(this.regexPatt, ''))
+            } catch(error) {
+                return '...'
+            }
         }
     }
 });
-</script>
 
-<div id="calc-wrap">
-    <div id="calc">
-        <textarea id=inputVal>0</textarea>
-    </div>
-</div>
+</script>

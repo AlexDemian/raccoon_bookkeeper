@@ -19,7 +19,7 @@ and write your configuration by following pattern:
 	EMAIL_HOST_PASSWORD = 'password'
 	EMAIL_PORT = 587
 
-Put SSL-certs: fullchain.pem, privkey.pem at
+Copy SSL-certs: fullchain.pem, privkey.pem 
 
     cp /yourdir/fullchain.pem ./nginx/certs
     cp /yourdir/privkey.pem ./nginx/certs

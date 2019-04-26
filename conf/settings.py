@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'Booker',
     'Auth',
     'UserConfs',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -37,6 +38,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 AUTH_USER_MODEL = 'Auth.User'
@@ -44,6 +46,12 @@ ROOT_URLCONF = 'conf.urls'
 LOGIN_URL = 'auth/signin_form'
 STATIC_URL = 'templates/static/'
 STATIC_ROOT = 'templates/static/'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
 
 LOGGING = {
     'version': 1,

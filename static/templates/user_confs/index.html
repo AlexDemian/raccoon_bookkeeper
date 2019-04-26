@@ -1,9 +1,261 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<br>
-<br>
-<br>
-<br>
-<h3>Hello!</h3>
+
+
+<style>
+    #user_confs {
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .table-field {
+        text-align: center;
+    }
+
+    table {
+        text-align: center;
+        align-content: center;
+    }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+    }
+
+
+</style>
+
+<div id="user_confs" align="center">
+    <h2>Sheets and categories</h2>
+    <hr>
+    <br>
+    <table style="width: 20%">
+        <thead>
+            <tr v-if="bsheets.length">
+                <td width="50%">
+                    <div class="table-field">
+                        <label for="bsheet_select"><b style="margin-right: 15px">Select sheet:</b></label>
+                        <select  v-model.number="selected_bs" class="form-control" id="bsheet_select">
+                            <option v-for="(bs, index) in bsheets" :value="index">[[ bs.fields.name ]]</option>
+                        </select>
+                    </div>
+                </td>
+
+                <td width="50%">
+                    <div class="table-field">
+                        <button @click="delete_base_sheet(selected_bs);" class="fa fa-trash-alt table-button mdm-button"></button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="table-field">
+                        <label for="new_sheet_name"><b style="margin-right: 15px">New sheet name:</b></label>
+                        <input v-model="new_bsheet.fields.name" id="new_sheet_name" class="form-control"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="table-field">
+                        <button @click='add_base_sheet();' class="fa fa-plus table-button mdm-button"></button>
+                    </div>
+                </td>
+            </tr>
+        </thead>
+    </table>
+    <br>
+    <br>
+    <br>
+
+    <template v-if="bsheets.length">
+        <div>
+            <input v-model="bsheets[selected_bs].fields.name" @blur="edit_base_sheet()" class="form-control" style="width: 200px; display: inline-block"/>
+            <input type="checkbox" v-model="bsheets[selected_bs].fields.autoadd" @change="edit_base_sheet()" class="form-control checkbox" id="addictive_checbox" style="display: inline-block; margin-left: 15px;">
+            <label for="addictive_checbox" style="display: inline-block;">Addictive</label>
+        </div>
+        <br>
+        <table style="width: 30%" class="table" align="center">
+            <thead>
+                <tr class="tr-total">
+                    <th width="40%">Name</th>
+                    <th width="40">Type</th>
+                    <th width="10%">Color</th>
+                    <th width="10%">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="(cat, index) in bsheet_categories">
+                    <td>
+                        <div class="table-field" @blur="edit_category(index)">
+                            <input v-model="cat.fields.name" class="form-control"/>
+                        </div>
+                    </td>
+
+                    <td>
+                        [[ cat.fields.positive ? 'Earnings': 'Costs' ]]
+                    </td>
+
+                    <td>
+                        <select v-model="cat.fields.color" class="form-control" @change="edit_category(index)" style="width: 40px; height: 30px;" :style="'background-color: ' + cat.fields.color">
+                            <option v-for="col in color_palette" :value="col" :style="'background-color: '+col"></option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <div class="table-field">
+                            <button @click='delete_category(index);' class="fa fa-trash-alt table-button mdm-button" ></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="table-field">
+                            <input v-model="new_category.fields.name" class="form-control"/>
+                        </div>
+                    </td>
+                    <td>
+                        <select class="form-control" v-model="new_category.fields.positive">
+                            <option :value="true">Earnings</option>
+                            <option :value="false">Costs</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select v-model="new_category.fields.color" class="form-control" style="width: 40px; height: 30px;" :style="'background-color: ' + new_category.fields.color">
+                            <option v-for="col in color_palette" :value="col" :style="'background-color: '+col"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="table-field">
+                            <button class="fa fa-plus table-button mdm-button" @click="add_category();" ></button>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </template>
+
+
+</div>
+
+<script>
+
+    bsheets = JSON.parse({{ bsheets|safe|tojson }});
+    all_categories =  JSON.parse({{ categories|safe|tojson }});
+    colors_palette = JSON.parse({{ colors_palette|safe|tojson  }})
+    console.log('_________________________________________Initial data____________________________________________');
+    console.log(bsheets);
+    console.log(all_categories);
+
+    t = new Vue({
+        el: '#user_confs',
+        data: {
+            bsheets: bsheets,
+            all_categories: all_categories,
+            color_palette: colors_palette,
+            selected_bs: 0,
+
+
+            new_bsheet: {
+                fields: {
+                    autoadd: true
+                }
+            },
+
+            new_category:
+                {
+                    fields: {
+                        color: colors_palette[0],
+                        positive: false
+                    }
+                }
+        },
+
+
+        methods: {
+
+            copy_obj: function(obj) {
+              return JSON.parse(JSON.stringify(obj))
+            },
+
+
+            add_category: function() {
+                copy = this.copy_obj(this.new_category);
+                copy.fields.sheetbase = bsheets[this.selected_bs].pk;
+                axios.post('/settings/add_category', JSON.stringify(copy.fields)).then(response => (
+                    copy.pk = response.data.pk
+                ));
+                this.all_categories.push(copy);
+            },
+
+            edit_category: function(index){
+                kwargs = this.bsheet_categories[index].fields;
+                kwargs.pk = this.bsheet_categories[index].pk;
+                axios.post('/settings/update_category', JSON.stringify(kwargs))
+            },
+
+            delete_category: function(index){
+                pk = this.bsheet_categories[index].pk;
+                kwargs = {pk: pk};
+                axios.post('/settings/delete_category', JSON.stringify(kwargs));
+                del_index = NaN;
+                this.all_categories.forEach(function (cat, index) {
+                    if (cat.pk === pk) {
+                        del_index = index;
+                    }
+                });
+                this.all_categories.splice(del_index, 1);
+            },
+
+
+
+            add_base_sheet: function () {
+                copy = this.copy_obj(this.new_bsheet);
+                axios.post('/settings/add_bsheet',JSON.stringify(copy.fields)).then(response => (
+                    copy.pk = response.data.pk
+                ));
+                this.bsheets.push(copy);
+                this.selected_bs = this.bsheets.length - 1;
+
+            },
+
+            edit_base_sheet: function() {
+                kwargs = this.bsheets[this.selected_bs].fields;
+                kwargs.pk = this.bsheets[this.selected_bs].pk;
+                axios.post('/settings/update_bsheet',JSON.stringify(kwargs));
+
+            },
+
+            delete_base_sheet: function (index) {
+                kwargs = {pk: bsheets[index].pk};
+                axios.post('/settings/delete_bsheet', JSON.stringify(kwargs));
+                this.bsheets.splice(index, 1);
+                this.selected_bs = this.bsheets.length - 1;
+            }
+
+
+
+        },
+
+        computed: {
+            bsheet_categories: function () {
+                var res = [];
+                if (this.bsheets.length) {
+                    var t = this.bsheets[this.selected_bs].pk;
+                    this.all_categories.forEach(function (cat) {
+                        if (cat.fields.sheetbase === t) {
+                            res.push(cat);
+                       }
+                    });
+                }
+                return res;
+            }
+        }
+
+    });
+</script>
+
+
+
 {% endblock %}

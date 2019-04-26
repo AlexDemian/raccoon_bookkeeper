@@ -23,7 +23,7 @@ class User(AbstractUser):
         self.save()
 
     def custom_save(self):
-        from UserConfs.models import UserCategories, default_sheetbases, SheetBases
+        from UserConfs.models import UserCategories, default_sheetbases, categories_colors_palette, SheetBases
 
         user = User.objects.create_user(username=self.username, password=self.password)
         user.save()
@@ -31,8 +31,8 @@ class User(AbstractUser):
         for bsheet in default_sheetbases:
             sbase = SheetBases(user=user, name=bsheet['name'])
             sbase.save()
-            for cat in bsheet['categories']:
-                cat.update({'user': user, 'sheetbase': sbase})
+            for cat, color in zip(bsheet['categories'], categories_colors_palette):
+                cat.update({'user': user, 'sheetbase': sbase, 'color': color})
                 UserCategories(**cat).save()
 
 

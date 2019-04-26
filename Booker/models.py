@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from Auth.models import User
-from UserConfs.models import SheetBases
+from UserConfs.models import SheetBases, UserCategories
 
 from unixtimestampfield.fields import UnixTimeStampField
 from django.contrib.postgres.fields import ArrayField
@@ -27,7 +27,7 @@ class Activities(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     sheet = models.ForeignKey(Sheets, on_delete=models.CASCADE)
     descr = models.CharField(max_length=200, blank=True, null=True)
-    category = models.CharField(max_length=30)
+    category = models.ForeignKey(UserCategories, on_delete=models.CASCADE)
     value = models.FloatField()
     active = models.BooleanField(default=True)
     pinned = models.BooleanField(default=False)

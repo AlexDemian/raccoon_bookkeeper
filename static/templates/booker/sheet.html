@@ -1,43 +1,18 @@
-<style>
+<style scoped>
     .table-edit-field {
         border: none;
         background: transparent;
-        outline-width: 0;
     }
 
+    .table {
+        text-align: left;
+        font-size: 14px;
+        font-weight: 900;
+    }
 
-
-    .tr-total {
+    input {
+        font-size: 13px;
         font-weight: 700;
-        border-top: var(--thrd-bg-color) solid 2px;
-        border-bottom: var(--thrd-bg-color) solid 2px;
-        font-size: 15px;
-    }
-
-
-    .table-button {
-        background-color: transparent;
-        color: black;
-        width: 40px;
-        height: 40px;
-        border: var(--sec-bg-color) solid 2px;;
-        border-radius: 40px;
-        font-weight: bold;
-    }
-
-    .table-button:hover {
-        transform:scale(1.2,1.2);
-        background-color: var(--thrd-bg-color);
-        box-shadow: var(--thrd-bg-color) 0px 0px 10px;
-    }
-
-    .table-image-button, .table-text-button {
-        background-color: transparent;
-        border: none;
-    }
-
-    .table-image-button:focus, .table-text-button:focus {
-        outline: none;
     }
 
 
@@ -47,45 +22,65 @@
     <div class="table-container" id="table-container-{{ sheet.id }}">
         <div>
             <div>
-                <h3>{{ period }}:{{ sheet.sheetbase.name }}<button type="button" class="table-button" style="margin-left:20px;" @click="delete_sheet()">X</button></h3>
+                <h3>{{ period }}:{{ sheet.sheetbase.name }}<button type="button" class="fa fa-times table-button big-button" style="margin-left:20px;" @click="delete_sheet()"></button></h3>
             </div>
 
-            <table class="table" style="text-align: left;">
+            <div v-if="!categories.length" align="center">
+                <h3 style="display: inline-block">No categories for sheet "{{ sheet.sheetbase.name  }}"</h3>
+                <a href="/settings" style="display: inline-block"><button class="fa fa-edit table-button big-button" style="margin-left: 10px"></button></a>
+                <br>
+                <b>Add them to work with table</b>
+            </div>
 
-              <thead v-show="rows.length">
+            <table class="table table-striped table-sm" v-if="categories.length">
+
+              <thead>
+
+                <tr class="tr-total" v-if="rows.length">
+                    <td></td>
+                    <td></td>
+                    <td>Earnings: [[ earnings ]]</td>
+                    <td>Costs: [[ costs ]]</td>
+                    <td></td>
+                    <td :style="'color: ' + [ delta < 0 ? 'red' : 'green' ]">Total: [[ delta ]]</td>
+                    <td></td>
+                </tr>
+
+
                 <tr class="tr-total">
 
-                  <th v-for="column in columns">
+                  <th v-for="column in columns" :width="column.width">
                     <button  @click="change_sortField(column.sortKey)" class="table-text-button">[[ column.label ]]</button>
                     <a v-show="sortField == column.sortKey" :class="'fa fa-arrow-' + [ sortReverse === -1 ? 'up' : 'down' ]" @click="change_sortField(column.sortKey)"/>
                   </th>
                 </tr>
+
               </thead>
               <tbody>
 
-                <tr v-for="(row,index) in sorted_rows">
+                <tr v-for="(row,index) in sorted_rows" >
                   <td>[[ index ]]</td>
                   <td>
-                      <button v-on:click="pin_row(index)" class="table-image-button">
-                          <img :src="'/img/booker/' + [ row.fields.pinned ? 'pinned' : 'unpinned' ] + '.png'" style="width: 30px; height: 30px" />
+                      <button v-on:click="pin_row(index)" class="table-image-button sml-button">
+                          <img :src="'/img/booker/' + [ row.fields.pinned ? 'pinned' : 'unpinned' ] + '.png'" class="sml-button"/>
                       </button>
                   </td>
                   <td>
-                     <input class="table-edit-field" v-on:blur="update_row(index)" v-model="row.fields.name" type="text" required>
+                     <input class="table-edit-field" @focus="onFocus=true;" @blur="update_row(index); onFocus=false;" v-model="row.fields.name" type="text" required>
                   </td>
                   <td>
-                      <input class="table-edit-field" v-on:blur="update_row(index)" v-model="row.fields.descr" type="text" >
+                      <input class="table-edit-field"  @focus="onFocus=true;" @blur="update_row(index); onFocus=false;" v-model="row.fields.descr" type="text" >
                   </td>
                   <td>
-                    <select class="form-control" v-model="row.fields.category" @change="update_row(index); chartUpdated = !chartUpdated;">
-                        <option v-for="cat in categories">[[ cat.fields.name ]]</option>
+                    <select class='form-control-sm' v-model="row.fields.category" @change="update_row(index); chartUpdated = !chartUpdated; format_value(row);">
+                        <option v-for="cat in categories" :value="cat.pk">[[ cat.fields.name ]]</option>
                     </select>
                   </td>
                   <td>
-                    <input class="table-edit-field" @blur="update_row(index);" @keyup="format_value(row); chartUpdated = !chartUpdated" v-model.number="row.fields.value" type="number" required>
+                    <input class="table-edit-field" @focus="onFocus=true;" @blur="format_value(row); update_row(index); onFocus=false;" @keyup="chartUpdated = !chartUpdated" v-model.number="row.fields.value" type="number" required>
                   </td>
                   <td style="width: 18%;">
-                    <button class="table-button" type="button" @click="delete_row(index);">X</button>
+                    <button class="fa fa-xs fa-times table-button sml-button" type="button" @click="delete_row(index);"></button>
                   </td>
                 </tr>
 
@@ -94,37 +89,39 @@
                     <td></td>
                   <td>
                     <div>
-                      <input class="form-control" placeholder="Name" v-model="input.name" id="name" type="text" required>
+                      <input class="form-control" placeholder="Name" v-model="input.fields.name" id="name" type="text" ref="name" required>
                     </div>
                   </td>
                   <td>
                     <div>
-                      <input class="form-control" placeholder="Description" v-model="input.descr" id="descr" type="text">
+                      <input class="form-control" placeholder="Description" v-model="input.fields.descr" id="descr" type="text">
                     </div>
                   </td>
                   <td>
-                    <div>
-                       <select class="form-control" v-model="input.category">
-                        <option v-for="cat in categories">[[ cat.fields.name ]]</option>
-                       </select>
-                    </div>
+                        <div>
+                            <select class="form-control" v-model="input.fields.category" @change="format_value(input);" style="width: calc(100% - 45px); display: inline-block;">
+                                <option v-for="cat in categories" :value="cat.pk">[[ cat.fields.name ]]</option>
+                            </select>
+                        <a href="/settings" style="display: inline-block"><button class="fa fa-xs fa-edit table-button sml-button" style="margin-left: 5px"></button></a>
+                        </div>
                   </td>
                   <td>
                     <div>
-                      <input class="form-control" placeholder="123" v-model.number="input.value" id="value" type="number" required>
+                      <input class="form-control" v-model.number="input.fields.value" type="number" required>
                     </div>
                   </td>
 
-                  <td><button @click="add_row" class="table-button">Add</button></td>
+                  <td><button @click="format_value(input); add_row();" class="fa fa-xs fa-plus table-button sml-button"></button></td>
                 </tr>
 
-                <tr class="tr-total" v-show="rows.length">
+                <tr class="tr-total" v-if="rows.length > 10">
                     <td></td>
-                    <td></td>
-                    <td>Total:</td>
+                       <td></td>
                     <td>Earnings: [[ earnings ]]</td>
+
                     <td>Costs: [[ costs ]]</td>
-                    <td :style="'color: ' + [ delta < 0 ? 'red' : 'green' ]">Delta: [[ delta ]]</td>
+                    <td></td>
+                    <td :style="'color: ' + [ delta < 0 ? 'red' : 'green' ]">Total: [[ delta ]]</td>
                     <td></td>
                 </tr>
 
@@ -134,15 +131,17 @@
         </div>
     </div>
 
-    <div class="chart-container" id="chart-container-{{ sheet.id }}" :style="'width: ' + [ this.show_charts ? '30%': '0']">
-        <template v-if="chartData.length > 0">
 
-        </template>
+    <template v-if="chartData.length">
+        <div class="chart-container" id="chart-container-{{ sheet.id }}"/>
+    </template>
 
-        <template v-else>
-            <h3 align="center" style="margin-top: 25%;">No data to display<br>Add first cost</h3>
-        </template>
-    </div>
+    <template v-else>
+        <div align="right"  style="margin-right: 10%">
+        <h3>No costs to display</h3>
+        </div>
+    </template>
+
 </div>
 
 
@@ -161,49 +160,40 @@
 
         data: {
             columns: [
-                {label:'#', sortKey: NaN},
-                {label:'Pin', sortKey: 'pinned'},
-                {label:'Name', sortKey: 'name'},
-                {label:'Description', sortKey: 'descr'},
-                {label:'Category', sortKey:'category'},
-                {label:'Price', sortKey:'value'},
-                {label:'Action', sortKey: NaN}
+                {label:'#', sortKey: NaN, width: '2%'},
+                {label:'Pin', sortKey: 'pinned', width: '7%'},
+                {label:'Name', sortKey: 'name', width: '28%'},
+                {label:'Description', sortKey: 'descr', width: '20%'},
+                {label:'Category', sortKey:'category', width: '25%'},
+                {label:'Price', sortKey:'value', width: '8%'},
+                {label:'Action', sortKey: NaN, width: '10%'}
             ],
             rows: activities,
             input: {
-                name: 'Test',
-                category: 'meal',
-                descr: '',
-                value: 100
+                fields: {
+                    pinned: false,
+                    sheet: this.sheet,
+                    category: this.categories[0] ? this.categories[0].pk : 0,
+                    value: 200
+                }
             },
             categories: categories,
-            show_charts: show_charts,
             sheet: sheet,
             isAlive: true,
             sortField: 'pinned',
             sortReverse: -1,
-            chartUpdated: false
+            chartUpdated: false,
+            onFocus: false
         },
 
        methods: {
         add_row: function() {
-
-            this.rows.push(
-                {
-                    fields:
-                        {
-                            pinned: false,
-                            name: this.input.name,
-                            category: this.input.category,
-                            descr: this.input.descr,
-                            value: this.input.value,
-                            sheet: this.sheet
-                        }
-                });
-            let index = this.rows.length-1;
-            axios.post('/booker/add_activity', JSON.stringify(this.rows[index].fields)).then(response => (
-                    this.rows[index].pk = response.data.id
+            copy = JSON.parse(JSON.stringify(this.input));
+            axios.post('/booker/add_activity', JSON.stringify(copy.fields)).then(response => (
+                    copy.pk = response.data.pk
             ));
+            this.rows.push(copy);
+            this.$refs.name.focus();
 
         },
 
@@ -220,7 +210,9 @@
 
         pin_row: function (index) {
             this.rows[index].fields.pinned = !this.rows[index].fields.pinned;
+            this.sortField ='pinned';
             this.update_row(index);
+
         },
         
         delete_sheet: function () {
@@ -248,9 +240,9 @@
 
         format_value: function(row)  {
             this.categories.forEach(function(cat){
-                if (!cat.fields.positive && cat.fields.name === row.fields.category) {
+                if (!cat.fields.positive && cat.pk === row.fields.category) {
                     row.fields.value = -Math.abs(row.fields.value)
-                } else if (cat.fields.positive && cat.fields.name === row.fields.category) {
+                } else if (cat.fields.positive && cat.pk === row.fields.category) {
                     row.fields.value = Math.abs(row.fields.value)
                 }
             });
@@ -288,32 +280,33 @@
             },
 
             sorted_rows: function () {
-               return this.rows.sort(this.table_sorter);
+                if (! this.onFocus) {
+                    this.rows.sort(this.table_sorter);
+                }
+                return this.rows
             },
 
             chartData: function() {
                 sums = {};
+
+                 this.categories.forEach(function(cat) {
+                    sums[String(cat.pk)] = {y: 0, name: cat.fields.name, color: cat.fields.color}
+                 });
+
                 this.rows.forEach(function(row) {
                      if (row.fields.value < 0) {
-                        if(!sums.hasOwnProperty(row.fields.category)) {
-                            sums[row.fields.category] = {y: 0, name: row.fields.category}
-                        }
-                        sums[row.fields.category].y += row.fields.value
+                        sums[String(row.fields.category)].y += row.fields.value
                     }
-
-                    //if (row.fields.category === cat.fields.name) {
-                    //    cat.sum += row.fields.value;
-                    //}
                 });
 
                 res = [];
 
                 for (const [key, value] of Object.entries(sums)) {
-                  res.push(value)
+                    if (value.y !== 0) {
+                        res.push(value)
+                    }
                 }
 
-
-                console.log(res);
                 return res
             }
 
