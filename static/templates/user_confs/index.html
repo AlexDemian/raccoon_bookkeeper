@@ -74,7 +74,9 @@
             <label for="addictive_checbox" style="display: inline-block;">Addictive</label>
         </div>
         <br>
+
         <table style="width: 30%" class="table" align="center">
+            <caption style="caption-side: top; color: black"><h4><b>Categories: [[ bsheet_categories.length ]] / 10</b></h4></caption>
             <thead>
                 <tr class="tr-total">
                     <th width="40%">Name</th>
@@ -108,7 +110,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="bsheet_categories.length < 10">
                     <td>
                         <div class="table-field">
                             <input v-model="new_category.fields.name" class="form-control"/>
@@ -122,7 +124,7 @@
                     </td>
                     <td>
                         <select v-model="new_category.fields.color" class="form-control" style="width: 40px; height: 30px;" :style="'background-color: ' + new_category.fields.color">
-                            <option v-for="col in color_palette" :value="col" :style="'background-color: '+col"></option>
+                            <option v-for="col in color_palette" :value="col" :style="'background-color: '+col" onfocus=""></option>
                         </select>
                     </td>
                     <td>

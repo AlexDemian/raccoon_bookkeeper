@@ -1,21 +1,4 @@
 <style>
-    .calc-btn {
-        width: 25px;
-        height: 25px;
-        background: var(--thrd-bg-color);
-        display: inline-block;
-        text-align: center;
-        line-height: 25px;
-        user-select: none;
-        border-radius: 5px;
-        margin: 2px;
-        color: black;
-    }
-
-    .calc-btn:hover {
-        background: #f70;
-        color: #fff;
-    }
 
     #calculator {
         width: 90%;
@@ -31,6 +14,8 @@
         font-size: 13px;
         resize: vertical;
         margin-right: 5%;
+        font-weight: 500;
+        color: black;
     }
 </style>
 
@@ -39,7 +24,7 @@
     <div id="calculator">
         <textarea class="calc-text-area" v-model="input" placeholder="3*5/(3-1+2)"></textarea>
         <br>
-        <input class="calc-text-area" disabled :value="'= ' + [calculated ? calculated : 0]"/>
+        <input class="calc-text-area" disabled :value="' = ' + [calculated ? calculated : 0]"/>
     </div>
 </div>
 
