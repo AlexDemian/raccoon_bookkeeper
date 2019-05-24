@@ -58,9 +58,10 @@
               </thead>
               <tbody>
 
+
                 <tr v-for="(row,index) in sorted_rows" >
-                  <td>[[ index ]]</td>
-                  <td>
+                   <td style="font-weight: 900; font-size: 18px" :style="'color: ' + [ row.fields.value > 0 ? 'green' : 'red' ] ">[[ row.fields.value > 0 ? '+': '-' ]]</td>
+                   <td>
                       <button v-on:click="pin_row(index)" class="table-image-button sml-button">
                           <img :src="'/img/booker/' + [ row.fields.pinned ? 'pinned' : 'unpinned' ] + '.png'" class="sml-button"/>
                       </button>
@@ -84,18 +85,19 @@
                   </td>
                 </tr>
 
+
                 <tr>
                     <td></td>
                     <td></td>
+                    <td>
+                        <div>
+                          <input class="form-control" placeholder="Name" v-model="input.fields.name" id="name" type="text" ref="name" required>
+                        </div>
+                    </td>
                   <td>
-                    <div>
-                      <input class="form-control" placeholder="Name" v-model="input.fields.name" id="name" type="text" ref="name" required>
-                    </div>
-                  </td>
-                  <td>
-                    <div>
-                      <input class="form-control" placeholder="Description" v-model="input.fields.descr" id="descr" type="text">
-                    </div>
+                      <div>
+                          <input class="form-control" placeholder="Description" v-model="input.fields.descr" id="descr" type="text">
+                      </div>
                   </td>
                   <td>
                         <div>
@@ -116,7 +118,7 @@
 
                 <tr class="tr-total" v-if="rows.length > 10">
                     <td></td>
-                       <td></td>
+                    <td></td>
                     <td>Earnings: [[ earnings ]]</td>
 
                     <td>Costs: [[ costs ]]</td>
@@ -150,17 +152,32 @@
 
 
 <script >
-    // Todo!: table sorting, Vue instance destroy
     var activities = JSON.parse({{ activities|safe|tojson }});
     var sheet = {{ sheet.id }};
     var categories = JSON.parse({{ categories|safe|tojson }})
+
+    Vue.component('total-row', {
+      props: ['earnings', 'costs', 'delta'],
+      template:
+`<tr class="tr-total" v-if="rows.length > 10">
+<td></td>
+<td></td>
+<td>Earnings: [[ earnings ]]</td>
+
+<td>Costs: [[ costs ]]</td>
+<td></td>
+<td :style="'color: ' + [ delta < 0 ? 'red' : 'green' ]">Total: [[ delta ]]</td>
+<td></td>
+</tr>`
+    });
+
 
     vueTable{{ sheet.id }} = new Vue({
         el: '#vue-sheet-{{ sheet.id }}',
 
         data: {
             columns: [
-                {label:'#', sortKey: NaN, width: '2%'},
+                {label:'', sortKey: NaN, width: '2%'},
                 {label:'Pin', sortKey: 'pinned', width: '7%'},
                 {label:'Name', sortKey: 'name', width: '28%'},
                 {label:'Description', sortKey: 'descr', width: '20%'},
@@ -280,8 +297,12 @@
             },
 
             sorted_rows: function () {
-                if (! this.onFocus) {
+                if (!this.onFocus) {
                     this.rows.sort(this.table_sorter);
+                    gt_zero = this.rows.filter(row => row.fields.value > 0)
+                    lt_zero = this.rows.filter(row => row.fields.value <= 0)
+                    this.rows = gt_zero.concat(lt_zero);
+
                 }
                 return this.rows
             },

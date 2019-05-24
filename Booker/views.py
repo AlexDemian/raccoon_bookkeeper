@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 
-from .models import Activities, Sheets, SheetBases
-from UserConfs.models import UserCategories
+from .models import Activities, Sheets
+from UserConfs.models import UserCategories, SheetBases
 from django.db.models import Q
 
 from .forms import AddSheetForm, FiltersForm, AddActivityForm
@@ -29,7 +29,7 @@ class Index(LoginRequiredMixin, View):
     template_name = 'booker/index.html'
     def get(self, request):
         context = {
-            'add_sheet_form': AddSheetForm(),
+            'add_sheet_form': AddSheetForm(user=request.user),
             'filter_form': FiltersForm(),
             'user': request.user
         }
@@ -50,7 +50,7 @@ class SheetsView(LoginRequiredMixin, View):
             return JsonResponse({'status': False, 'message': 'Unexpected action: %s' % action})
 
     def get_sheets_ids(self, request):
-        filters = Q(user=request.user)
+        filters = Q(user=request.user, deleted=False)
 
         if request.GET.get('filter_date_from') and request.GET.get('filter_date_to'):
             filters &= Q(date__range=[request.GET.get('filter_date_from'), request.GET.get('filter_date_to')])
@@ -67,16 +67,16 @@ class SheetsView(LoginRequiredMixin, View):
         ids = request.GET.getlist('sheet_ids[]', [])
 
         if ids:
-            sheets = Sheets.objects.filter(id__in=ids, user_id=request.user).order_by('-date')
+            sheets = Sheets.objects.filter(id__in=ids, user_id=request.user, deleted=False).order_by('-date')
 
             for sheet in sheets:
-                all_activities = Activities.objects.filter(sheet=sheet)
+                all_activities = Activities.objects.filter(sheet=sheet, deleted=False)
 
                 context = {
                     'period': '%s %s' % (calendar.month_name[sheet.date.month], sheet.date.year),
                     'activities': serializers.serialize("json", all_activities),
                     'sheet': sheet,
-                    'categories': serializers.serialize("json", UserCategories.objects.filter(user=request.user, sheetbase=sheet.sheetbase))
+                    'categories': serializers.serialize("json", UserCategories.objects.filter(sheetbase=sheet.sheetbase, user=request.user))
                 }
                 response.append({
                     'html': render_to_string('booker/sheet.html', context, request=request),
@@ -92,7 +92,8 @@ class SheetsView(LoginRequiredMixin, View):
 class SheetCreate(LoginRequiredMixin, View):
 
     def post(self, request):
-        Sheets(date=request.POST.get('add_sheet_date'), user=request.user, sheetbase_id=request.POST.get('add_sheetbase_id')).save()
+        sheetbase = SheetBases.objects.filter(pk=request.POST.get('add_sheetbase_id'), user=request.user)[0]
+        Sheets(date=request.POST.get('add_sheet_date'), user=request.user, sheetbase=sheetbase).save()
         return JsonResponse({'status': True})
 
 
@@ -100,14 +101,10 @@ class SheetDelete(LoginRequiredMixin, View):
 
     def post(self, request):
         kwargs = json.loads(request.body.decode('utf-8'))
-        Sheets.objects.get(user=request.user, id=kwargs['sheet_id']).delete()
-        return JsonResponse({'status': True})
-
-    def post_delete(self, request):
         try:
-            Sheets.objects.get(user=request.user, id=request.POST['sheet_id']).delete()
+            Sheets.objects.filter(user=request.user, id=kwargs['sheet_id']).update(deleted=True)
             return JsonResponse({'status': True})
-            
+
         except ObjectDoesNotExist:
             return JsonResponse({'status': False, 'message': 'Sheet does not exist'})
 
@@ -115,7 +112,7 @@ class SheetDelete(LoginRequiredMixin, View):
 class ActivityDelete(LoginRequiredMixin, View):
     def post(self, request):
         kwargs = json.loads(request.body.decode('utf-8'))
-        Activities.objects.filter(user=request.user, id=kwargs['id']).delete()
+        Activities.objects.filter(user=request.user, id=kwargs['id']).update(deleted=True)
         return JsonResponse({'status': True})
 
 

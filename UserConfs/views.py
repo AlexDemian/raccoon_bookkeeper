@@ -57,7 +57,7 @@ class SettingsView(LoginRequiredMixin, View):
 
         context = {
             'bsheets':  serializers.serialize('json', SheetBases.objects.filter(user=request.user).order_by('name')),
-            'categories':  serializers.serialize('json', UserCategories.objects.filter(user=request.user).order_by('name')),
+            'categories':  serializers.serialize('json', UserCategories.objects.filter(user=request.user).order_by('-positive', 'name')),
             'colors_palette': json.dumps(categories_colors_palette)
         }
 

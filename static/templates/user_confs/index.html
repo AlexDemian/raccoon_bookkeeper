@@ -99,9 +99,10 @@
                     </td>
 
                     <td>
-                        <select v-model="cat.fields.color" class="form-control" @change="edit_category(index)" style="width: 40px; height: 30px;" :style="'background-color: ' + cat.fields.color">
+                        <select v-if="!cat.fields.positive" v-model="cat.fields.color" class="form-control" @change="edit_category(index)" style="width: 40px; height: 30px;" :style="'background-color: ' + cat.fields.color">
                             <option v-for="col in color_palette" :value="col" :style="'background-color: '+col"></option>
                         </select>
+                        <div v-if="cat.fields.positive" class="form-control" style="border: 2px solid black; width: 40px; height: 30px; background-color: transparent;"></div>
                     </td>
 
                     <td>
@@ -123,7 +124,7 @@
                         </select>
                     </td>
                     <td>
-                        <select v-model="new_category.fields.color" class="form-control" style="width: 40px; height: 30px;" :style="'background-color: ' + new_category.fields.color">
+                        <select v-if="!new_category.fields.positive" v-model="new_category.fields.color" class="form-control" style="width: 40px; height: 30px;" :style="'background-color: ' + new_category.fields.color">
                             <option v-for="col in color_palette" :value="col" :style="'background-color: '+col" onfocus=""></option>
                         </select>
                     </td>

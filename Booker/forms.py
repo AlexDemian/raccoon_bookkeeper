@@ -3,29 +3,20 @@ from django import forms
 from .models import Activities
 from UserConfs.models import UserCategories, SheetBases
 import datetime
-import calendar
+import monthdelta
 
 def getDateSet():
-    months_range = calendar.month_name
-    dt_now = datetime.datetime.now()
-    cur_month = dt_now.month
-    cur_year = dt_now.year
-    cur_date = '%s-%s-01' % (cur_year, str(cur_month).zfill(2))
-
+    dt_now = datetime.datetime.now().date().replace(day=1)
+    cur_date = dt_now.strftime("%Y-%m-01")
     date_choicelist = []
 
-    for i in range(-3, 3):
-        year = cur_year
-        month_index = cur_month + i
-
-        if month_index == 0:
-            year -= 1
-            month_index = 12 - month_index
-
-        key = '%s-%s-01' % (year, str(month_index).zfill(2))
-        value = '%s %s' % (year, months_range[month_index])
+    for i in reversed(range(-3, 3)):
+        dt = dt_now - monthdelta.monthdelta(i)
+        key = dt.strftime("%Y-%m-01")
+        value = dt.strftime("%Y %B")
         date_choicelist.append([key, value])
-    return cur_date,  date_choicelist
+
+    return cur_date, date_choicelist
 
 def generic_select2(field_id, choices, multiple=False, **kwargs):
 
@@ -65,27 +56,24 @@ def generic_float_input(field_id, placeholder='10.4'):
             }),
         required=True)
 
-def period_select2(field_id):
-    cur_date, date_choicelist = getDateSet()
-    return generic_select2(field_id, date_choicelist, initial=cur_date)
-
-def basesheet_select2(field_id, uid):
-    choices = [(s.id, s.name) for s in SheetBases.objects.filter(user_id=uid)]
+def basesheet_select2(field_id, user):
+    choices = [(s.id, s.name) for s in SheetBases.objects.filter(user=user)]
     return generic_select2(field_id, choices)
 
 class AddSheetForm(Form):
-
-    add_sheet_date = period_select2('add_sheet_period')
+    cur_date, date_choicelist = getDateSet()
+    add_sheet_date = generic_select2('add_sheet_period', date_choicelist, initial=cur_date)
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        self.fields['add_sheetbase_id'] =  basesheet_select2('add_sheetbase_id', 2)
+        self.fields['add_sheetbase_id'] =  basesheet_select2('add_sheetbase_id', user)
 
 class FiltersForm(Form):
     cur_date, date_choicelist = getDateSet()
     filter_name = generic_char_input('filterFormSheetName', placeholder='name includes')
     filter_date_from = generic_select2('filterFormDateFrom', date_choicelist, initial=cur_date)
-    filter_date_to = generic_select2('filterFormDateTo', date_choicelist, initial=cur_date)
+    filter_date_to = generic_select2('filterFormDateTo', date_choicelist, initial=date_choicelist[-1])
 
 class AddActivityForm(ModelForm):
 

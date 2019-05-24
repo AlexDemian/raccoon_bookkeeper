@@ -1,3 +1,4 @@
+*nginx/certs*
 migrations/*
 /__pycache__
 /.idea
