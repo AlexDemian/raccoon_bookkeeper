@@ -4,7 +4,7 @@
 
 
 <style>
-    #user_confs {
+    .app-container  {
         justify-content: center;
         margin-top: 20px;
     }
@@ -26,7 +26,7 @@
 
 </style>
 
-<div id="user_confs" align="center">
+<div id="user_confs" class="app-container" align="center">
     <h2>Sheets and categories</h2>
     <hr>
     <br>
@@ -89,8 +89,8 @@
             <tbody>
                 <tr v-for="(cat, index) in bsheet_categories">
                     <td>
-                        <div class="table-field" @blur="edit_category(index)">
-                            <input v-model="cat.fields.name" class="form-control"/>
+                        <div class="table-field" >
+                            <input v-model="cat.fields.name" class="form-control" @blur="edit_category(index)"/>
                         </div>
                     </td>
 
@@ -139,17 +139,18 @@
         </table>
     </template>
 
-
 </div>
+<br>
+<br>
+<br>
+
 
 <script>
 
     bsheets = JSON.parse({{ bsheets|safe|tojson }});
     all_categories =  JSON.parse({{ categories|safe|tojson }});
     colors_palette = JSON.parse({{ colors_palette|safe|tojson  }})
-    console.log('_________________________________________Initial data____________________________________________');
-    console.log(bsheets);
-    console.log(all_categories);
+  
 
     t = new Vue({
         el: '#user_confs',
@@ -199,19 +200,23 @@
             },
 
             delete_category: function(index){
-                pk = this.bsheet_categories[index].pk;
-                kwargs = {pk: pk};
-                axios.post('/settings/delete_category', JSON.stringify(kwargs));
-                del_index = NaN;
-                this.all_categories.forEach(function (cat, index) {
-                    if (cat.pk === pk) {
-                        del_index = index;
+                var vueInstance = this;
+                dialogbox('All linked by category rows will be deleted!', 'warning', 'Do you really want to delete this category?' , true)
+                .then(function (value) {
+                    if (value.value) {
+                        let pk = vueInstance.bsheet_categories[index].pk;
+                        kwargs = {pk: pk};
+                        axios.post('/settings/delete_category', JSON.stringify(kwargs));
+                        del_index = NaN;
+                        vueInstance.all_categories.forEach(function (cat, index) {
+                            if (cat.pk === pk) {
+                                del_index = index;
+                            }
+                        });
+                        vueInstance.all_categories.splice(del_index, 1);
                     }
-                });
-                this.all_categories.splice(del_index, 1);
+                })
             },
-
-
 
             add_base_sheet: function () {
                 copy = this.copy_obj(this.new_bsheet);
@@ -231,14 +236,17 @@
             },
 
             delete_base_sheet: function (index) {
-                kwargs = {pk: bsheets[index].pk};
-                axios.post('/settings/delete_bsheet', JSON.stringify(kwargs));
-                this.bsheets.splice(index, 1);
-                this.selected_bs = this.bsheets.length - 1;
+                var vueInstance = this;
+                dialogbox('All linked child sheets, sheet categories and rows will be deleted!', 'warning', 'Do really want to delete this sheet?', true)
+                .then(function (value) {
+                if (value.value) {
+                    kwargs = {pk: vueInstance.bsheets[index].pk};
+                    axios.post('/settings/delete_bsheet', JSON.stringify(kwargs));
+                    vueInstance.bsheets.splice(index, 1);
+                    vueInstance.selected_bs = vueInstance.bsheets.length - 1;
+                    }
+                })
             }
-
-
-
         },
 
         computed: {

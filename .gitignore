@@ -1,5 +1,5 @@
-*nginx/certs*
-migrations/*
+*nginx/certs/*
+*migrations/*
 /__pycache__
 /.idea
 /env

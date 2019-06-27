@@ -13,7 +13,7 @@ def getDateSet():
     for i in reversed(range(-3, 3)):
         dt = dt_now - monthdelta.monthdelta(i)
         key = dt.strftime("%Y-%m-01")
-        value = dt.strftime("%Y %B")
+        value = dt.strftime("%B %Y")
         date_choicelist.append([key, value])
 
     return cur_date, date_choicelist
@@ -71,33 +71,12 @@ class AddSheetForm(Form):
 
 class FiltersForm(Form):
     cur_date, date_choicelist = getDateSet()
-    filter_name = generic_char_input('filterFormSheetName', placeholder='name includes')
+    filter_sheetbase_name = generic_char_input('filter_sheetbase_name', placeholder='sheet name contains')
     filter_date_from = generic_select2('filterFormDateFrom', date_choicelist, initial=cur_date)
     filter_date_to = generic_select2('filterFormDateTo', date_choicelist, initial=date_choicelist[-1])
 
-class AddActivityForm(ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        uid = kwargs.pop('uid', None)
-        super(AddActivityForm, self).__init__(*args, **kwargs)
 
-        if uid:
-            self.fields['category'].widget.choices = [[cat.name, cat.name] for cat in UserCategories.objects.filter(user=uid)]
 
-    class Meta:
-        model = Activities
-        fields = ['name', 'category', 'descr', 'value']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(
-                attrs={
-                    'class': 'select2_bootstrap',
-                    'style': 'width: 100%;'
-                },
-
-            ),
-            'descr': forms.TextInput(attrs={'class': 'form-control'}),
-            'value': forms.TextInput(attrs={'class': 'form-control'}),
-        }
 
 

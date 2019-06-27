@@ -47,11 +47,11 @@ LOGIN_URL = 'auth/signin_form'
 STATIC_URL = 'templates/static/'
 STATIC_ROOT = 'templates/static/'
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+#    }
+#}
 
 LOGGING = {
     'version': 1,
@@ -70,6 +70,15 @@ LOGGING = {
 }
 
 CSRF_COOKIE_NAME = "csrftoken"
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',

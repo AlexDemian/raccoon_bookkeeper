@@ -17,14 +17,21 @@
     <meta name="google-site-verification" content="9Lb06PFXcVL9alMYwHD5i_tQdPReEwZeg2qU97V8M-I" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>axios.defaults.xsrfCookieName = 'csrftoken'; axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";</script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script>Vue.options.delimiters = ['[[',']]'];</script>
-
+    <script>
+    axios.interceptors.response.use(function (response) {
+        // Do something with response data
+        return response;
+      }, function (error) {
+        dialogbox('Please, try reload the page.', 'error', 'It seems error occured :(.');
+        return Promise.reject(error);
+      });
+    </script>
     
 </head>
 <body>
@@ -97,16 +104,19 @@
         .sml-button {
             width: 25px;
             height: 25px;
+            font-size: 12px;
         }
 
         .mdm-button {
             width: 30px;
             height: 30px;
+            font-size: 15px;
         }
 
         .big-button {
             width: 40px;
             height: 40px;
+            font-size: 20px;
         }
 
         .tr-total {
@@ -116,7 +126,11 @@
             font-size: 15px;
         }
 
-
+        .coin-image {
+            width: 20px;
+            height: 20px;
+            margin-left: 1px;
+        }
 
 
     </style>
@@ -188,9 +202,38 @@
             color: black;
         }
 
+        .overlay {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background-color:rgba(0, 0, 0, 0.6);
+            z-index:9998;
+        }
 
+        .vue-alert {
+            position: absolute;
+            top: calc(25% - 150px);
+            left: calc(50% - 300px);
+            width: 600px;
+            height: 300px;
+            z-index:9999;
+            background-color: #f5f5f5;
+            border-radius: 25px;
+            font-size: 22px;
+            font-weight: 700;
+            border: darkgrey 3px solid;
+            -webkit-text-stroke-width: .5px;
+            -webkit-text-stroke-color: black;
+        }
 
-
+        .swal-alert {
+            border-radius: 25px;
+            font-size: 22px;
+            font-weight: 700;
+            border: darkgrey 3px solid;
+        }
 
     </style>
 
@@ -202,37 +245,37 @@
             <div class="navbar-collapse collapse">
 
                 <a class="navbar-brand" href="index" id="logo-image-container">
-                    <img src="img/logo_nav.png" id="logo-image" class="d-inline-block align-center" alt="">
+                    <img src="/img/logo_nav.png" id="logo-image" class="d-inline-block align-center" alt="">
                 </a>
 
-                <a href="/index" >
-                  <div id="logo_label">
-                    <i>Raccoon Booker</i>
+                <a href="/index">
+                    <div id="logo_label">
+                        Raccoon
+                        B<img src="/img/coin.png" class="coin-image"/><img src="/img/coin.png" class="coin-image"/>ker
                   </div>
                 </a>
 
                 <div id="navbar_menu">
                     <div class="div_navbar_button">
-                        <form  action="./settings" method="get">
-                            <button type="submit" class="btn btn-md nav-button" style="margin-left: 30px;">Settings</button>
-                        </form>
+                        <a href="/settings/sheet_settings"><button class="btn btn-md nav-button" style="margin-left: 30px">Sheets and categories</button></a>
                     </div>
 
                     <div class="div_navbar_button">
-                        <form  action="/about" method="get" >
-                            <button type="submit" class="btn btn-md nav-button" style="margin-left: 30px;">About</button>
-                        </form>
+                        <a href="/about"><button class="btn btn-md nav-button" style="margin-left: 30px">About</button></a>
                     </div>
 
                     <div class="div_navbar_button">
-                        <form  action="/donate" method="get" >
-                            <button type="submit" class="btn btn-md nav-button" style="margin-left: 30px;">
-                                <i class="glyphicon glyphicon-heart red" style="color:#DC143C"></i> Donate <span class="fa fa-heart" style="color: red"></span></i>
+                        <a href="/donate">
+                            <button class="btn btn-md nav-button" style="margin-left: 30px">
+                                <i class="glyphicon glyphicon-heart red" style="color:#DC143C"></i>
+                                Donate <span class="fa fa-heart" style="color: red"/>
                             </button>
-                         </form>
+                        </a>
                     </div>
 
-
+                    <div class="div_navbar_button">
+                        <a href="/settings/account_settings"><button class="btn btn-md nav-button" style="margin-left: 30px">Account settings</button></a>
+                    </div>
 
                 </div>
             </div>
@@ -255,22 +298,47 @@
 
 {% endblock %}
 
-<script>
-    function alert(message) {
-        var box = bootbox.alert({
-            message: message,
-            backdrop: true,
-            className: 'alert-window'
-        });
-        box.find('.modal-content').css({'background-color': '#fefbd8'})
-    };
-
-    {% for message in messages %}
-        alert('{{ message }}');
-    {% endfor %}
 
 
-</script>
+    <script>
+        function dialogbox(message, message_type='success', title='',  showCancelButton=false) {
+            var types = {
+              'warning': 'text-warning',
+              'error': 'text-danger',
+              'info': 'text-info',
+              'success': 'text-success'
+            };
+
+            return sw = Swal.fire({
+              title: title,
+              text: message,
+              width: 600,
+              showCancelButton: showCancelButton,
+              buttonsStyling: false,
+              imageUrl: '/img/alert-icons/raccoon-icon.png',
+              imageWidth: 150,
+              imageHeight: 150,
+              cancelButtonText: 'Oh, no!',
+              confirmButtonText: 'Ok!',
+              reverseButtons: true,
+              customClass: {
+                  popup: 'swal-alert',
+                  title: types[message_type],
+                  confirmButton: 'nav-button btn yellow-button',
+                  cancelButton: 'nav-button btn yellow-button'
+              }
+          })
+
+        };
+
+        {% for message in messages %}
+            dialogbox('{{ message }}', '{{ message.tags }}');
+        {% endfor %}
+    </script>
+
+
+
+
 
 
 

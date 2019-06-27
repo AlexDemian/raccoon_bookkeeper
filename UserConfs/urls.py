@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import SettingsView, BsheetCreate, BsheetUpdate, BsheetDelete, CategoryCreate, CategoryUpdate, CategoryDelete
+from .views import SheetSettingsView, BsheetCreate, BsheetUpdate, BsheetDelete, CategoryCreate, CategoryUpdate, CategoryDelete, AccountSettingsView
 
 
 urlpatterns = [
@@ -9,7 +9,8 @@ urlpatterns = [
     url('add_bsheet', BsheetCreate.as_view()),
     url('update_bsheet', BsheetUpdate.as_view()),
     url('delete_bsheet', BsheetDelete.as_view()),
-    url('', SettingsView.as_view()),
+    url('account_settings', AccountSettingsView.as_view()),
+    url('sheet_settings', SheetSettingsView.as_view()),
 
 ]
 

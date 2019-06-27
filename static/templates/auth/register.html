@@ -10,9 +10,6 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Registration</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
 
       <form action="/auth/register" id="register_form" method="POST">
@@ -28,8 +25,8 @@
         </center>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button"  class="btn btn-primary" onclick="register()">Register</button>
+          <button type="button" class="nav-button" data-dismiss="modal">Close</button>
+          <button type="button"  class="nav-button yellow-button" onclick="register()">Register</button>
         </div>
       </form>
     </div>
@@ -46,7 +43,7 @@
         dataType: 'json',
         success: function (data) {
           if (!(data.is_valid)) {
-            alert(data.message);
+            dialogbox('', 'error', data.message);
             } else {
             $fields_valid.push(true);
           }

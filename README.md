@@ -19,11 +19,6 @@ and write your configuration by following pattern:
 	EMAIL_HOST_PASSWORD = 'password'
 	EMAIL_PORT = 587
 
-Copy SSL-certs: fullchain.pem, privkey.pem 
-
-    cp /yourdir/fullchain.pem ./nginx/certs
-    cp /yourdir/privkey.pem ./nginx/certs
-
 Make shure yourhost:80 and yourhost:443 are not busy.
 
 Make it run!
@@ -33,3 +28,15 @@ Add -d flag for detached mode
     docker-compose up
     # OR
     docker-compose up -d 
+    
+<br>
+HTTPS 
+
+Connect to nginx docker-container and run:
+
+    apt-get update
+    apt-get install python-certbot-nginx
+    certbot --nginx -d raccoonbooker.com -d www.raccoonbooker.com
+    
+    crontab -e
+    0 12 * * * /usr/bin/certbot renew --quiet

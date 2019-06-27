@@ -28,8 +28,6 @@ services:
       - ./nginx:/etc/nginx/conf.d
       - ./static:/usr/share/nginx/html
       - ./nginx/logs:/var/log/nginx
-      - ./nginx/certs:/etc/letsencrypt/live/raccoonbooker.com/
-
 
     ports:
       - 80:80

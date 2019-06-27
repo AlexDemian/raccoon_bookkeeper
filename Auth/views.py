@@ -40,10 +40,11 @@ def send_confirmation_letter(user_id, username, password, token):
 
     context = {
         'user_email': username,
-        'user_password': password,
+        'user_password': password[:2] + '*' * (len(password) - 4) + password[-2:],
         'confirmation_url': '%s/auth/account_verification?uid=%s&token=%s' % (BASE_URL, user_id, token)
     }
     message = render_to_string('auth/confirmation_letter.html', context)
+
     letter = EmailMessage(subject, message, 'admin@raccoon_booker', [username])
     letter.content_subtype = 'html'
     letter.send()
@@ -94,12 +95,12 @@ def login(request):
 
             else:
                 if not user.confirmed:
-                    messages.info(request, not_confirmed_message)
+                    messages.warning(request, not_confirmed_message)
                 auth.login(request, user)
                 return redirect("/index")
         else:
 
-            messages.error(request, 'Incorrect username and/or password')
+            messages.warning(request, 'Incorrect username and/or password')
             return redirect("/auth/signin_form")
 
     else:

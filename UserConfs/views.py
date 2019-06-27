@@ -52,7 +52,7 @@ class CategoryDelete(LoginRequiredMixin, View):
         UserCategories(pk=kwargs['pk'], user=request.user).delete()
         return JsonResponse({'status': True})
 
-class SettingsView(LoginRequiredMixin, View):
+class SheetSettingsView(LoginRequiredMixin, View):
     def get(self, request):
 
         context = {
@@ -61,4 +61,9 @@ class SettingsView(LoginRequiredMixin, View):
             'colors_palette': json.dumps(categories_colors_palette)
         }
 
-        return render(request, 'user_confs/index.html', context)
+        return render(request, 'user_confs/sheet_settings.html', context)
+
+class AccountSettingsView(LoginRequiredMixin, View):
+    def get(self, request):
+        context = {}
+        return render(request, 'user_confs/account_settings.html', context)

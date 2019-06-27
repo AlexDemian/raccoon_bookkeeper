@@ -15,20 +15,6 @@ default_sheetbases = [
     }
 ]
 
-"""
-categories_colors_palette = [
-    '#649ada',
-    '#1d2c3f',
-    '#808c3a',
-    '#41648c',
-    '#2d2973',
-    '#442c2c',
-    '#a3a3a3',
-    '#16bb9d',
-    '#d24f00',
-    '#bb7a28'
-]
-"""
 
 categories_colors_palette = [
     '#ED9C33',

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block navbar %}{% endblock %}
+{% block style %}{% endblock %}
+{% block content %}
+
+<style>
+
+    .hr-line {
+        height: 2px;
+        background-color: black;
+    }
+
+    .round-avatar {
+        border-radius: 125px;
+        border: black solid 2px;
+        width: 125px;
+        height: 125px;
+        display: inline-block;
+
+    }
+
+
+    .column {
+        margin-right: 15px;
+        padding-bottom: 25px;
+    }
+
+    span {
+        display: block;
+    }
+
+    .font-small {
+        font-size: 14px;
+    }
+
+    .bg-grey {
+        background-color: whitesmoke;
+    }
+
+    .fa-star {
+        color: #4b7bff;
+    }
+
+
+</style>
+
+<body>
+
+<div align="center">
+    <br>
+    <div class="container">
+        <div class="col-12 hr-line"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <img src="img/cv/foto.jpg" class="round-avatar" />
+                </div>
+
+                <div class="col-8">
+                    <h1>Alexey Demianenko</h1>
+                    <h3>Python backend developer/researcher</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 hr-line"></div>
+    </div>
+
+    <img src="img/cv/wave.png" style="width: 20%; height: 20%">
+    <br>
+    <br>
+
+    <div class="container" style="padding-bottom: 50px;">
+      <div class="row">
+        <div class="col-3 text-left bg-grey font-small column" style="border-left: 5px solid grey;">
+
+            <h5>General:</h5>
+            <span>Age: {{age}} y.o.</span>
+            <span>Experience: {{ experience }} years (since 12.2016)</span>
+            <span>Level: middle</span>
+            <span>English: Pre-Intermediate</span>
+            <br>
+
+            <h5>Skills:</h5>
+            {% for category in skills %}
+                <span><b>{{category}}:</b></span>
+                {% for skill in skills[category] %}
+                <span style="margin-left: 25px">
+                    {{ skill[0] }}
+                    {% for i in range(skill[1]) %}
+                    <span class="fa fa-star"></span>
+                    {% endfor %}
+                </span>
+                {% endfor %}
+                <br>
+            {% endfor %}
+            <br>
+
+            <h5>Contacts:</h5>
+            <span>Email: a.demianenko92@gmail.com</span>
+            <span>Skype/telegram: +380970804520</span>
+            <br>
+
+            <h5>Links:</h5>
+            <span><a href="https://freelance.ua/user/feoness/opinions/">freelance.ua/opinions</a></span>
+            <span><a href="https://github.com/AlexDemian">GitHub</a></span>
+            <span><a href="https://www.linkedin.com/in/alex-demianenko-ua-dp/">LinkedIn</a></span>
+            <span><a href="https://www.raccoonbooker.com/">Pet project</a></span>
+
+        </div>
+
+        <div class="col-8 text-left bg-grey column" >
+            <br>
+            <h5 class="text-center">Experience</h5>
+            <br>
+            <span>07.2012 to 12.2016: support engineer at “XOtel”</span>
+            <span>01.2016 to 05.2016: worked on a freelance project</span>
+            <span>12.2016 to current: python backend developer at “XOtel”</span>
+            <br>
+            <br>
+            <h5 class="text-center">Finished favourite projects:</h5>
+            <br>
+            <div class="font-small">
+            <h6>First complex bot</h6>
+            I fully automated all working processes of our support department which I worked in.
+            Bot sends notifications, collects statistical anomalies, detects equipment issues and regulates operations of single nodes based on data analysis.
+            <br>
+            <br>
+            <h6>Seldon</h6>
+            Automatic VoIP traffic control system based on the analysis of statistical data and margin.<br>
+            Good challenge of managers evaluation system implementation.<br>
+            Got up to ~20% margin increase :)<br>
+            <br>
+            <br>
+            <h6>Pinkerton</h6>
+                Best project I ever made, really love it :)<br>
+                Anti-fraud VoIP testing web-tool based on own amplitude and frequencies pattern analyzing engine.<br>
+                Sample use-case looks like: you run task via web UI like 'create test by USA route through 20 VoIP-partners, 10 calls for each one'
+                After form submitting Pinkerton collects numbers for test, choose audio language preset for that country,
+                makes 200 calls with Asterisk software and records each call voice data, including remote-end reaction. Then engine analyzing recorded audio by different attributes:
+                subscriber behavior, silence, voice intensity, does some frequencies patterns' checks and finally makes report to DB like 'found X-type fraud by that Y-partner' that you can observe via UI.
+                Eventually system was extended by many features and various tools like automatic trouble ticket generator, fraud-monitor on live VoIP traffic and other.
+            <br>
+            <br>
+            <h5 class="text-center">About myself</h5>
+            <br>
+            <span>Creative, initiative, responsible</span>
+            <span>Married</span>
+            <br>
+            <h5 class="text-center">Job expectations</h5>
+            <br>
+            <span><b>Remote position, full­time</b></span>
+            <span>Unusual interesting tasks</span>
+            <span>Long term collaboration</span>
+        </div>
+
+      </div>
+    <br>
+    <br>
+    <br>
+    </div>
+</div>
+</div>
+
+{% endblock %}
+
