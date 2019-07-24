@@ -25,10 +25,17 @@
     <script>Vue.options.delimiters = ['[[',']]'];</script>
     <script>
     axios.interceptors.response.use(function (response) {
-        // Do something with response data
+        if (response.data.validationErrors) {
+            console.log(response.data.validationErrors);
+            Object.keys(response.data.validationErrors).forEach(function (fieldName) {
+                dialogbox(fieldName + ': ' + response.data.validationErrors[fieldName].join(', ').toLowerCase(), 'error', 'Incorrect data');
+            });
+
+        }
         return response;
       }, function (error) {
-        dialogbox('Please, try reload the page.', 'error', 'It seems error occured :(.');
+        dialogbox('Please, try reload the page', 'error', 'It seems error occured');
+
         return Promise.reject(error);
       });
     </script>
@@ -212,28 +219,7 @@
             z-index:9998;
         }
 
-        .vue-alert {
-            position: absolute;
-            top: calc(25% - 150px);
-            left: calc(50% - 300px);
-            width: 600px;
-            height: 300px;
-            z-index:9999;
-            background-color: #f5f5f5;
-            border-radius: 25px;
-            font-size: 22px;
-            font-weight: 700;
-            border: darkgrey 3px solid;
-            -webkit-text-stroke-width: .5px;
-            -webkit-text-stroke-color: black;
-        }
 
-        .swal-alert {
-            border-radius: 25px;
-            font-size: 22px;
-            font-weight: 700;
-            border: darkgrey 3px solid;
-        }
 
     </style>
 
@@ -259,12 +245,8 @@
                     <div class="div_navbar_button">
                         <a href="/settings/sheet_settings"><button class="btn btn-md nav-button" style="margin-left: 30px">Sheets and categories</button></a>
                     </div>
-
-                    <div class="div_navbar_button">
-                        <a href="/about"><button class="btn btn-md nav-button" style="margin-left: 30px">About</button></a>
-                    </div>
-
-                    <div class="div_navbar_button">
+                    
+                    <div class="div_navbar_button" hidden>
                         <a href="/donate">
                             <button class="btn btn-md nav-button" style="margin-left: 30px">
                                 <i class="glyphicon glyphicon-heart red" style="color:#DC143C"></i>
@@ -299,6 +281,24 @@
 {% endblock %}
 
 
+    <style>
+        .swal-alert {
+            border-radius: 25px;
+            font-size: 22px;
+            font-weight: 700;
+            border: darkgrey 3px solid;
+        }
+
+        .alert-image {
+            width: 35%;
+            height: 35%;
+            display: inline-block;
+        }
+
+
+
+    </style>
+
 
     <script>
         function dialogbox(message, message_type='success', title='',  showCancelButton=false) {
@@ -309,21 +309,22 @@
               'success': 'text-success'
             };
 
+            var pattern = `<img class='alert-image' src="/img/alert-icons/${message_type}.jpg"/>
+            <div style="display: inline-block; width: 50%;">
+                <h1 class="${types[message_type]}">${title}</h1>
+                <h3 class="">${message}</h3>
+            </div>`
+
             return sw = Swal.fire({
-              title: title,
-              text: message,
+              html: pattern,
               width: 600,
               showCancelButton: showCancelButton,
               buttonsStyling: false,
-              imageUrl: '/img/alert-icons/raccoon-icon.png',
-              imageWidth: 150,
-              imageHeight: 150,
               cancelButtonText: 'Oh, no!',
               confirmButtonText: 'Ok!',
               reverseButtons: true,
               customClass: {
                   popup: 'swal-alert',
-                  title: types[message_type],
                   confirmButton: 'nav-button btn yellow-button',
                   cancelButton: 'nav-button btn yellow-button'
               }

@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 
 from .models import Activities, Sheets
 from UserConfs.models import UserCategories, SheetBases
-from django.db.models import Q
+from django.db.models import Q, F
 
 from .forms import AddSheetForm, FiltersForm
 from django import forms
@@ -20,14 +20,16 @@ from django.views import View
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 
-from django.core import serializers
-from django.forms.models import model_to_dict
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
-from rest_framework import viewsets
+from django.core import serializers
 from .serializers import ActivitiesSerializer
 
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
+
 
 import json
 import calendar
@@ -44,129 +46,106 @@ class Index(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
 
-class SheetsView(LoginRequiredMixin, View):
+class ActivitiesApi(APIView):
+    serializer_class = ActivitiesSerializer
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        if not request.GET.get('target'):
-            return redirect("index")
+        return Response(status=status.HTTP_200_OK)
 
-        action = 'get_%s' % request.GET.get('target')
-        if hasattr(SheetsView, action):
-            return getattr(SheetsView(), action)(request)
-
+    def put(self, request):
+        kwargs = request.data
+        kwargs['user'] = request.user.pk
+        serializer = self.serializer_class(data=kwargs)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return JsonResponse({'status': False, 'message': 'Unexpected action: %s' % action})
+            return Response({'validationErrors': serializer.errors}, status=status.HTTP_200_OK)
 
-    def get_sheets_ids(self, request):
+    def post(self, request):
+        kwargs = request.data
+        kwargs['user'] = request.user.pk
+
+        activity = Activities.objects.get(pk=kwargs['id'])
+        serializer = self.serializer_class(data=kwargs)
+
+        if serializer.is_valid():
+            serializer.update(activity, serializer.validated_data)
+            return Response(status=status.HTTP_200_OK)
+        else:
+
+            return Response({'validationErrors': serializer.errors}, status=status.HTTP_200_OK)
+
+    def delete(self, request):
+        kwargs = request.data
+        Activities.objects.filter(user=request.user, id=kwargs['id']).update(deleted=Q(deleted=False))
+        return Response(status=status.HTTP_200_OK)
+
+
+class SheetsApi(APIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def render(self, request, sheet):
+        activities_qs = Activities.objects.filter(sheet=sheet)
+
+        context = {
+            'activities': json.dumps(ActivitiesSerializer(activities_qs, many=True).data),
+            'sheet': sheet,
+            'categories': json.dumps(
+                list(UserCategories.objects.filter(sheetbase=sheet.sheetbase, user=request.user).values()))
+        }
+
+        return {
+            'html': render_to_string('booker/sheet.html', context, request=request),
+            'id': sheet.id
+        }
+
+    def get(self, request):
+        kwargs = request.query_params
+        response = []
         filters = Q(user=request.user, deleted=False)
-
-        if request.GET.get('filter_date_from') and request.GET.get('filter_date_to'):
-            filters &= Q(date__range=[request.GET.get('filter_date_from'), request.GET.get('filter_date_to')])
+        if kwargs.get('filter_date_from') and kwargs.get('filter_date_to'):
+            filters &= Q(date__range=[kwargs.get('filter_date_from'), kwargs.get('filter_date_to')])
 
         if request.GET.get('filter_sheetbase_name'):
-            filters &= Q(name__icontains=request.GET.get('filter_sheetbase_name'))
+            filters &= Q(name__icontains=kwargs.get('filter_sheetbase_name'))
 
-        sheets = [s[0] for s in Sheets.objects.filter(filters).values_list('id').order_by('date')]
+        sheets = Sheets.objects.filter(filters).order_by('date', 'sheetbase')
 
-        return render(request, 'booker/sheets_loader.html', {'sheets': sheets})
+        for sheet in sheets:
+            response.append(self.render(request, sheet))
 
-    def get_sheets(self, request):
-        response = []
+        return Response({'sheets': response}, status=status.HTTP_200_OK)
 
-        ids = request.GET.getlist('sheet_ids[]', [])
-
-        if ids:
-            sheets = Sheets.objects.filter(id__in=ids, user_id=request.user, deleted=False)
-
-            for sheet in sheets:
-
-                context = {
-                    'period': '%s %s' % (calendar.month_name[sheet.date.month], sheet.date.year),
-                    'activities': serializers.serialize("json", Activities.objects.filter(sheet=sheet)),
-                    'sheet': sheet,
-                    'categories': serializers.serialize("json", UserCategories.objects.filter(sheetbase=sheet.sheetbase, user=request.user))
-                }
-                response.append({
-                    'html': render_to_string('booker/sheet.html', context, request=request),
-                    'id': sheet.id
-                })
-
-        return JsonResponse({'status': True, 'sheets': response})
-
-
-
-
-class SheetCreate(LoginRequiredMixin, View):
 
     def post(self, request):
-        sheetbase = SheetBases.objects.filter(pk=request.POST.get('add_sheetbase_id'), user=request.user)[0]
-        Sheets(date=datetime.datetime.strptime(request.POST.get('add_sheet_date'), '%Y-%m-%d'), user=request.user, sheetbase=sheetbase).save()
-        return JsonResponse({'status': True})
-
-
-class SheetDelete(LoginRequiredMixin, View):
-
-    def post(self, request):
-        kwargs = json.loads(request.body.decode('utf-8'))
-        try:
-            Sheets.objects.filter(user=request.user, id=kwargs['sheet_id']).update(deleted=True)
-            return JsonResponse({'status': True})
-
-        except ObjectDoesNotExist:
-            return JsonResponse({'status': False, 'message': 'Sheet does not exist'})
-
-class SheetUpdate(LoginRequiredMixin, View):
-
-    def post(self, request):
-        kwargs = json.loads(request.body.decode('utf-8'))
-        print(kwargs)
+        kwargs = request.data
         try:
             Sheets.objects.filter(user=request.user, id=kwargs.pop('id', -1)).update(**kwargs)
-            return JsonResponse({'status': True})
+            return Response(status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist:
-            return JsonResponse({'status': False, 'message': 'Sheet does not exist'})
+            return Response({'validationError':  {'Sheet': ["sheet doesn't exists"]}}, status=status.HTTP_200_OK)
 
 
-class ActivitiesViewSet(ModelViewSet):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ActivitiesSerializer
-    queryset = Activities.objects.all()
+    def put(self, request):
+        kwargs = request.data
+        sheetbase = SheetBases.objects.filter(pk=kwargs['add_sheetbase_id'], user=request.user)[0]
+        Sheets(date=datetime.datetime.strptime(kwargs['add_sheet_date'], '%Y-%m-%d'), user=request.user, sheetbase=sheetbase).save()
+        return Response(status=status.HTTP_201_CREATED)
 
+    def delete(self, request):
+        kwargs = request.data
 
-    def perform_create(self, serializer):
-        kwargs = {
-            'user': self.request.user,
-        }
-        serializer.save(**kwargs)
+        try:
+            Sheets.objects.filter(user=request.user, id=kwargs['sheet_id']).update(deleted=True)
+            return Response(status=status.HTTP_200_OK)
 
-
-
-class ActivityDelete(LoginRequiredMixin, View):
-    def post(self, request):
-        kwargs = json.loads(request.body.decode('utf-8'))
-        Activities.objects.filter(user=request.user, id=kwargs['id']).update(deleted=Q(deleted=False))
-        return JsonResponse({'status': True})
-
-
-class ActivityAdd(LoginRequiredMixin, View):
-    def post(self, request):
-        kwargs = json.loads(request.body.decode('utf-8'))
-        kwargs['sheet'] = Sheets(pk=kwargs['sheet'])
-        kwargs['category'] = UserCategories(pk=kwargs['category'])
-        act = Activities(**kwargs)
-        act.user = request.user
-        act.save()
-        return JsonResponse({'pk': act.pk})
-
-
-class ActivityUpdate(LoginRequiredMixin, View):
-    def post(self, request):
-        kwargs = json.loads(request.body.decode('utf-8'))
-        act = Activities.objects.filter(pk=kwargs.pop('id'))
-        act.update(**kwargs)
-        return JsonResponse({'status': True})
-
+        except ObjectDoesNotExist:
+            return Response({'validationError':  {'Sheet': ["sheet doesn't exists"]}}, status=status.HTTP_200_OK)
 
 
 

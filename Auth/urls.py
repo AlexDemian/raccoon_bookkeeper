@@ -1,7 +1,5 @@
 from django.conf.urls import url
-#from django.contrib.staticfiles.urls import static
-from .views import login, logout, register, confirm_account, AuthView, validate_username, validate_password
-#from conf.settings import STATIC_ROOT, STATIC_URL
+from .views import login, logout, register, confirm_account, AuthView, validate_username, validate_password, change_password
 
 urlpatterns = [
     url('signin_form', AuthView.as_view()),
@@ -11,4 +9,5 @@ urlpatterns = [
     url('account_verification', confirm_account),
     url('validate_username', validate_username),
     url('validate_password', validate_password),
+    url('change_password', change_password),
     ]

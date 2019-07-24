@@ -15,6 +15,8 @@ class User(AbstractUser):
     access_token = models.CharField(max_length=100, default=uuid.uuid4)
     confirmed = models.BooleanField(default=False)
 
+    password_invalid_message = 'Password must be 7-20 latin characters/digits'
+
     class Meta:
         db_table = 'users'
 
@@ -38,8 +40,7 @@ class User(AbstractUser):
 
         return user
 
-    @staticmethod
-    def username_valid(username, ajax=False):
+    def username_valid(self, username, ajax=False):
         message = ''
         is_valid = True
 
@@ -61,14 +62,13 @@ class User(AbstractUser):
         elif not ajax and not is_valid:
             raise ValidationError(message)
 
-    @staticmethod
-    def password_valid(password, ajax=False):
+
+    def password_valid(self, password, ajax=False):
         is_valid = re.search('^[a-zA-Z0-9]{7,20}$', password) is not None
-        message = 'Password must be 7-20 latin characters/digits' if not is_valid else ''
         if ajax:
-            return JsonResponse({'is_valid': is_valid, 'message': message})
+            return JsonResponse({'is_valid': is_valid, 'message': self.password_invalid_message  if not is_valid else ''})
 
         elif not ajax and not is_valid:
-            raise ValidationError(message)
+            raise ValidationError(self.password_invalid_message)
 
 

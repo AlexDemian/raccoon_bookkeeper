@@ -72,7 +72,7 @@ class AddSheetForm(Form):
 class FiltersForm(Form):
     cur_date, date_choicelist = getDateSet()
     filter_sheetbase_name = generic_char_input('filter_sheetbase_name', placeholder='sheet name contains')
-    filter_date_from = generic_select2('filterFormDateFrom', date_choicelist, initial=cur_date)
+    filter_date_from = generic_select2('filterFormDateFrom', date_choicelist, initial=date_choicelist[1])
     filter_date_to = generic_select2('filterFormDateTo', date_choicelist, initial=date_choicelist[-1])
 
 

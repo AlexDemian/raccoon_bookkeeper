@@ -19,6 +19,7 @@ def CV(request):
             'Backend': [
                 ('Python', 4),
                 ('Django', 3),
+                ('Django REST', 1),
                 ('Nginx', 4),
             ],
 

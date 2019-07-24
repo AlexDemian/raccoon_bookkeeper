@@ -14,14 +14,39 @@
 <div id='vue-app' class="app-container" align="center">
     <h2>Setting new password</h2>
     <hr>
-    <input class="form-control" style="width: 200px"/>
+    <h6>
+        New password:
+        <input class="form-control" v-model="pass1" style="width: 200px" type="password" />
+    </h6>
+
+
+    <h6>Confirm new password:<input class="form-control" v-model="pass2" style="width: 200px" type="password"/></h6>
     <br>
-    <input class="form-control"  style="width: 200px"/>
+    <button class="table-button nav-button" @click="change_password()">Change</button>
 </div>
 
 <script>
     new Vue ({
-
+        el: '#vue-app',
+        data: {
+            pass1: '',
+            pass2: ''
+        },
+        methods: {
+            change_password: function () {
+                if (this.pass1 != this.pass2) {
+                    dialogbox('', 'error', "Password fields aren't equal");
+                } else {
+                    axios.post('/auth/change_password', {'pass': this.pass1}).then(
+                        function (value) {
+                            if (value.status === 204) {
+                                dialogbox('Password changed :)', 'success', "Success!")
+                            }
+                        }
+                    );
+                }
+            }
+        }
     });
 
 </script>

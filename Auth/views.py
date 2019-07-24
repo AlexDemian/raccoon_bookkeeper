@@ -16,6 +16,10 @@ from django.template.loader import render_to_string
 
 from conf.settings import BASE_URL
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
 
 
 
@@ -82,7 +86,7 @@ def register(request):
 
 
 def login(request):
-    not_confirmed_message = 'Your account is not confirmed. Please check your email for confirmation letter.'
+    not_confirmed_message = 'Your account is not confirmed. Please check your mailbox for confirmation letter.'
 
     if request.method == 'POST':
         user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])
@@ -95,7 +99,7 @@ def login(request):
 
             else:
                 if not user.confirmed:
-                    messages.warning(request, not_confirmed_message)
+                    messages.info(request, not_confirmed_message)
                 auth.login(request, user)
                 return redirect("/index")
         else:
@@ -106,10 +110,22 @@ def login(request):
     else:
         return redirect("/auth/signin_form")
 
+@login_required
+@api_view(['POST'])
+def change_password(request):
+    try:
+        password = request.data["pass"]
+        User().password_valid(password, ajax=False)
+        request.user.set_password(password)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    except:
+        return Response({'validationErrors': {'password': [User.password_invalid_message]}}, status=status.HTTP_200_OK)
+
 
 def validate_username(request):
-    return User.username_valid(request.GET["username"], ajax=True)
+    return User().username_valid(request.GET["username"], ajax=True)
 
 
 def validate_password(request):
-    return User.password_valid(request.GET["password"], ajax=True)
+    return User().password_valid(request.GET["password"], ajax=True)

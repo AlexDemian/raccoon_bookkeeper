@@ -23,6 +23,9 @@
         height: 20px;
     }
 
+select:focus {
+    outline: none;
+}
 
 </style>
 
@@ -30,10 +33,10 @@
     <h2>Sheets and categories</h2>
     <hr>
     <br>
-    <table style="width: 20%">
+    <table style="width: 300px;%">
         <thead>
             <tr v-if="bsheets.length">
-                <td width="50%">
+                <td width="250px">
                     <div class="table-field">
                         <label for="bsheet_select"><b style="margin-right: 15px">Select sheet:</b></label>
                         <select  v-model.number="selected_bs" class="form-control" id="bsheet_select">
@@ -42,7 +45,7 @@
                     </div>
                 </td>
 
-                <td width="50%">
+                <td  class="align-bottom">
                     <div class="table-field">
                         <button @click="delete_base_sheet(selected_bs);" class="fa fa-trash-alt table-button mdm-button"></button>
                     </div>
@@ -55,9 +58,9 @@
                         <input v-model="new_bsheet.fields.name" id="new_sheet_name" class="form-control"/>
                     </div>
                 </td>
-                <td>
+                <td class="align-bottom">
                     <div class="table-field">
-                        <button @click='add_base_sheet();' class="fa fa-plus table-button mdm-button"></button>
+                        <button @click='add_base_sheet();' class="fa fa-plus table-button mdm-button align-text-bottom" ></button>
                     </div>
                 </td>
             </tr>
@@ -68,11 +71,20 @@
     <br>
 
     <template v-if="bsheets.length">
-        <div>
-            <input v-model="bsheets[selected_bs].fields.name" @blur="edit_base_sheet()" class="form-control" style="width: 200px; display: inline-block"/>
-            <input type="checkbox" v-model="bsheets[selected_bs].fields.autoadd" @change="edit_base_sheet()" class="form-control checkbox" id="addictive_checbox" style="display: inline-block; margin-left: 15px;">
-            <label for="addictive_checbox" style="display: inline-block;">Addictive</label>
-        </div>
+
+        <table style="width: 300px;">
+            <tr class="align-top">
+                <td width="250px" >
+                    <label for="selected-bs-name"><b>Name:</b></label>
+                    <input v-model="bsheets[selected_bs].fields.name" @blur="edit_base_sheet()" class="form-control" id="selected-bs-name"/>
+                </td>
+
+                <td align="center">
+                    <label for="addictive_checbox" style="display: inline-block;"><b>Addictive</b></label>
+                    <input type="checkbox" v-model="bsheets[selected_bs].fields.autoadd" @change="edit_base_sheet()" class="form-control checkbox" id="addictive_checbox">
+                </td>
+            </tr>
+        </table>
         <br>
 
         <table style="width: 30%" class="table" align="center">
@@ -124,8 +136,8 @@
                         </select>
                     </td>
                     <td>
-                        <select v-if="!new_category.fields.positive" v-model="new_category.fields.color" class="form-control" style="width: 40px; height: 30px;" :style="'background-color: ' + new_category.fields.color">
-                            <option v-for="col in color_palette" :value="col" :style="'background-color: '+col" onfocus=""></option>
+                        <select v-if="!new_category.fields.positive" class="color-palette" v-model="new_category.fields.color" class="form-control" style="width: 40px; height: 30px;" :style="'background-color: ' + new_category.fields.color">
+                            <option v-for="col in color_palette" :value="col" :style="'background-color: '+col"></option>
                         </select>
                     </td>
                     <td>

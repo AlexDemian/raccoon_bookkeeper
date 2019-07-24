@@ -4,7 +4,7 @@
 <style>
 
 
-    #child_container {
+    #sheets_container {
         position: absolute;
         top: 80px;
         margin-left: 200px;
@@ -15,7 +15,7 @@
 
     .sheet-container {
         margin-bottom: 100px;
-        min-height: 500px;
+        min-height: 300px;
         padding-top: 10px;
 
 
@@ -81,8 +81,7 @@
         <div class="right-menu-field">{{ filter_sheet_form["filter_sheetbase_name"] }}</div>
         <div class="right-menu-field">{{ filter_sheet_form["filter_date_from"] }}</div>
         <div class="right-menu-field">{{ filter_sheet_form["filter_date_to"] }}</div>
-
-        <button class="nav-button btn yellow-button" style="margin-top: 10px" type="button" onclick="get_all_sheets()">Filter</button>
+        <button class="nav-button btn yellow-button" style="margin-top: 10px" type="button" onclick="get_sheets()">Filter</button>
     </form>
     <br>
     <div class="horizontal-separator"></div>
@@ -108,40 +107,40 @@
 
 </div>
 
-<div id="child_container"></div>
+<div id="sheets_container"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
+<script src="../modules/jscharts/canvasjs.min.js"></script>
+<script src="../modules/jscharts/renderChart.js"></script>
 <script>
+    function get_sheets() {
+        let args = $('#filters_form').serialize();
+        $('#sheets_container').html('');
+        axios.get('/booker/api/sheets?'+ args).then(
+           function (value) {
+                value.data.sheets.forEach(function(item) {
+                    $('#sheets_container').append(`<div class="sheet-container" id="sheet-container-${item.id}">${item.html}</div>`);
+                });
 
-
-    function get(url, args, result_to) {
-        $.get(url, args)
-            .done(function( data ) {
-                result_to.html(data);
-        });
+                if (value.data.sheets.length === 0) {
+                    $('#sheets_container').append('<h3 align="center"><i>No sheets found. Change filters or add first one :)</i></h3>')
+                }
+           }
+        );
     }
-
-    function get_all_sheets() {
-        args = $('#filters_form').serialize();
-        get('booker/api_sheets', args, $('#child_container'));
-    }
-
 
     function add_sheet() {
-
-        $.post('booker/create_sheet', $('#add_sheet_form').serializeArray())
-            .done(function( data ) {
-                if (!data.status) {
-                alert(data.message);
-                } else {
-                    get_all_sheets();
-                }
-        });
-
+        axios.put('/booker/api/sheets', $('#add_sheet_form').serialize()).then(
+            function(value) {
+               get_sheets();
+            }
+        );
     }
 
     $(".select2_bootstrap").select2();
-    get_all_sheets();
+    get_sheets();
 
 
 
